@@ -1,0 +1,62 @@
+# Layout only — sizes, slots, and icon materials. Titles, item names and lore
+# are text and come from messages.yml (messages.gui.*), resolved by
+# MessageService when each menu is built (see punishment/issuance, task 9.2).
+
+category-menu:
+  size: 27
+  items:
+    ban:
+      slot: 11
+      icon: NETHERITE_SWORD
+    mute:
+      slot: 15
+      icon: PAPER
+
+reason-menu:
+  size: 54
+  content-slots: [10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34]
+  back-button:
+    slot: 45
+    icon: ARROW
+  previous-page:
+    slot: 48
+    icon: SPECTRAL_ARROW
+  next-page:
+    slot: 50
+    icon: SPECTRAL_ARROW
+
+history-menu:
+  size: 54
+  content-slots: [10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34]
+  previous-page:
+    slot: 48
+    icon: SPECTRAL_ARROW
+  next-page:
+    slot: 50
+    icon: SPECTRAL_ARROW
+  filter-all:
+    slot: 45
+    icon: WHITE_STAINED_GLASS_PANE
+  filter-ban:
+    slot: 46
+    icon: RED_STAINED_GLASS_PANE
+  filter-mute:
+    slot: 47
+    icon: YELLOW_STAINED_GLASS_PANE
+
+report-menu:
+  size: 54
+  window-daily:
+    slot: 1
+    icon: CLOCK
+  window-weekly:
+    slot: 2
+    icon: CLOCK
+  window-monthly:
+    slot: 3
+    icon: CLOCK
+  window-all-time:
+    slot: 4
+    icon: CLOCK
+  ranking-slots: [19, 20, 21, 22, 23, 24, 25]
+  reason-slots: [28, 29, 30, 31, 32, 33, 34]

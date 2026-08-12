@@ -1,0 +1,141 @@
+# Every value under `messages:` may be a single line, a list of lines (sent in
+# order), or blank/empty — which turns that message off entirely. All of them
+# are MiniMessage (https://docs.advntr.dev/minimessage/format.html). {token}
+# placeholders are substituted per-message; an unknown {token} is left literal.
+# {prefix} is available everywhere and comes from the `prefix` key below.
+
+prefix: "<gray>[<gold>SPunish</gold>]</gray> "
+
+date-time:
+  pattern: "dd/MM/yyyy HH:mm"
+  zone: "America/Sao_Paulo"
+
+duration:
+  max-units: 2
+  permanent-text: "permanente"
+  units:
+    s: "s"
+    m: "m"
+    h: "h"
+    d: "d"
+    w: "sem"
+    mo: "mês"
+    y: "ano"
+
+state:
+  active: "<green>Ativa</green>"
+  expired: "<gray>Expirada</gray>"
+  revoked: "<yellow>Revogada</yellow>"
+
+report:
+  window:
+    daily: "Diário"
+    weekly: "Semanal"
+    monthly: "Mensal"
+    all-time: "Desde o início"
+
+messages:
+  general:
+    no-permission: "{prefix}<red>Você não tem permissão para fazer isso.</red>"
+    player-not-found: "{prefix}<red>Jogador '{player}' não encontrado.</red>"
+    invalid-category: "{prefix}<red>Categoria inválida. Use: ban, mute.</red>"
+    invalid-time: "{prefix}<red>Tempo inválido. Use 'n' para permanente, ou algo como 30d, 1h30m.</red>"
+    internal-error: "{prefix}<red>Ocorreu um erro interno. A equipe técnica foi notificada.</red>"
+    storage-unavailable: "{prefix}<red>O armazenamento está temporariamente indisponível. Tente novamente em breve.</red>"
+
+  punish:
+    usage:
+      - "{prefix}<red>Uso incorreto:</red>"
+      - "<gray>/punish <jogador></gray>"
+      - "<gray>/punish <jogador> <categoria></gray>"
+      - "<gray>/punish <jogador> <categoria> <motivo> <tempo></gray>"
+    console-requires-full-form: "{prefix}<red>O console só pode usar a forma completa: /punish <jogador> <categoria> <motivo> <tempo>.</red>"
+    self-punish-denied: "{prefix}<red>Você não pode punir a si mesmo.</red>"
+    target-exempt: "{prefix}<red>{target} está protegido contra essa punição.</red>"
+    already-active: "{prefix}<red>{target} já possui uma punição ativa dessa categoria (restante: {duration-remaining}).</red>"
+    reason-permission-denied: "{prefix}<red>Você não tem permissão para usar esse motivo.</red>"
+    duration-limit-exceeded: "{prefix}<red>Você não pode aplicar uma duração maior que {duration-limit}.</red>"
+    confirmation: "{prefix}<green>{target} foi {category-verb} por {reason-display} ({duration}).</green>"
+    staff-announcement: "{prefix}<yellow>{actor} {category-verb-past} {target} por {reason-display} ({duration}).</yellow>"
+    public-announcement: "{prefix}<gray>{target} foi {category-verb}.</gray>"
+
+  unpunish:
+    no-active-punishment: "{prefix}<red>{target} não possui uma punição ativa dessa categoria.</red>"
+    confirmation: "{prefix}<green>A punição de {target} foi revogada.</green>"
+    staff-announcement: "{prefix}<yellow>{actor} revogou a punição de {target}.</yellow>"
+
+  reload:
+    success: "{prefix}<green>Configuração recarregada com sucesso.</green>"
+    failure-header: "{prefix}<red>A configuração não foi recarregada. Erros encontrados:</red>"
+    failure-line: "<red> - {error}</red>"
+
+  screen:
+    ban:
+      - "<red><bold>Você foi banido</bold></red>"
+      - "<gray>Motivo:</gray> {reason-display}"
+      - "<gray>Autor:</gray> {actor}"
+      - "<gray>Expira em:</gray> {duration-remaining}"
+      - "<gray>Identificador:</gray> {punishment-id}"
+    mute-warning: "{prefix}<red>Você está mutado. Motivo: {reason-display}. Restante: {duration-remaining}.</red>"
+
+  history:
+    empty: "{prefix}<gray>Esse jogador não possui punições registradas.</gray>"
+    console-header: "Histórico de {target}:"
+    console-line: " #{punishment-id} [{category}] {reason-display} por {actor} em {applied-at} — {state}"
+
+  record:
+    no-data: "{prefix}<gray>Nenhuma punição encontrada nessa janela.</gray>"
+    cooldown: "{prefix}<red>Aguarde antes de gerar outro relatório ({cooldown-remaining}).</red>"
+
+  gui:
+    category:
+      title: "Selecione uma categoria"
+      item:
+        ban:
+          name: "<red>Ban</red>"
+          lore:
+            - "<gray>Clique para banir {target}</gray>"
+        mute:
+          name: "<yellow>Mute</yellow>"
+          lore:
+            - "<gray>Clique para mutar {target}</gray>"
+    reason:
+      title: "Selecione um motivo"
+      back: "<gray>« Voltar</gray>"
+      previous-page: "<gray>« Página anterior</gray>"
+      next-page: "<gray>Próxima página »</gray>"
+      item:
+        name: "<white>{reason-display}</white>"
+        lore:
+          - "<gray>Duração:</gray> {duration}"
+          - "<gray>Clique para aplicar</gray>"
+    history:
+      title: "Histórico de {target}"
+      previous-page: "<gray>« Página anterior</gray>"
+      next-page: "<gray>Próxima página »</gray>"
+      filter-all: "<white>Todas</white>"
+      filter-ban: "<red>Somente Ban</red>"
+      filter-mute: "<yellow>Somente Mute</yellow>"
+      entry:
+        name: "{state-icon} {reason-display}"
+        lore:
+          - "<gray>Categoria:</gray> {category}"
+          - "<gray>Autor:</gray> {actor}"
+          - "<gray>Aplicada em:</gray> {applied-at}"
+          - "<gray>Estado:</gray> {state}"
+      detail:
+        title: "Detalhes da punição"
+        lore:
+          - "<gray>Identificador:</gray> {punishment-id}"
+          - "<gray>Servidor de origem:</gray> {origin-server}"
+    report:
+      title: "Relatório — {category}"
+      window-daily: "Diário"
+      window-weekly: "Semanal"
+      window-monthly: "Mensal"
+      window-all-time: "Desde o início"
+      total: "<white>Total:</white> {total}"
+      revocation-rate: "<white>Taxa de revogação:</white> {revocation-rate}%"
+      ranking-entry: "<gray>{rank}.</gray> {staffer} — {count}"
+      reason-entry: "<gray>{reason-display}:</gray> {count}"
+      staffer-title: "Relatório de {staffer} — {category}"

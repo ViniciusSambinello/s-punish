@@ -24,21 +24,21 @@
 
 ## 3. Configuração, catálogo e mensagens
 
-- [ ] 3.1 Definir os records `@ConfigSerializable` de `config.yml`: banco, pool, identidade do servidor, sync, modo de falha, retenção, comandos bloqueados no mute e limites de duração por permissão
-- [ ] 3.2 Definir os records de `reasons.yml`: motivo com id, nome de exibição, duração, ícone, descrição e permissão opcional, agrupados por categoria
-- [ ] 3.3 Implementar o carregamento Configurate dos arquivos, criando-os a partir dos recursos padrão quando ausentes
-- [ ] 3.4 Implementar `ReasonCatalogValidator` cobrindo id duplicado na categoria, id vazio, nome de exibição vazio, duração ausente, unidade inválida, duração não positiva e categoria desconhecida
-- [ ] 3.5 Escrever testes unitários do validador, incluindo o caso de ids iguais em categorias diferentes ser válido
-- [ ] 3.6 Implementar `ReasonCatalog` com busca por categoria e por id, e filtragem por permissão do autor
-- [ ] 3.7 Implementar a troca atômica de configuração: carrega e valida em objetos novos, e só então substitui a referência em vigor
-- [ ] 3.8 Escrever teste unitário provando que uma recarga inválida preserva o catálogo anterior intacto
-- [ ] 3.9 Definir o `messages.yml` padrão com todas as chaves: confirmações, erros, permissões, telas de rejeição, avisos de mute, anúncios, rótulos de estado e de janela de relatório
-- [ ] 3.10 Implementar `MessageService` com resolução de chave, fallback para o padrão embutido, aviso de chave ausente registrado uma única vez, e suporte a mensagem em lista e a mensagem vazia como desligada
-- [ ] 3.11 Implementar a substituição de placeholders com prefixo global, deixando placeholder desconhecido literal e registrando o aviso uma única vez por chave
-- [ ] 3.12 Implementar a renderização MiniMessage com degradação para texto sem formatação quando a tag for malformada, registrando a chave defeituosa
-- [ ] 3.13 Implementar a formatação de data e hora com padrão e fuso configuráveis, convertendo a partir de UTC
-- [ ] 3.14 Escrever testes unitários de `MessageService`: substituição, placeholder desconhecido, chave ausente, tag malformada, lista de linhas e mensagem desligada
-- [ ] 3.15 Definir o `gui.yml` padrão com títulos, tamanhos, slots, ícones e textos de item das GUIs de categoria, motivo, histórico e relatório
+- [x] 3.1 Definir os records `@ConfigSerializable` de `config.yml`: banco, pool, identidade do servidor, sync, modo de falha, retenção, comandos bloqueados no mute e limites de duração por permissão
+- [x] 3.2 Definir os records de `reasons.yml`: motivo com id, nome de exibição, duração, ícone, descrição e permissão opcional, agrupados por categoria
+- [x] 3.3 Implementar o carregamento Configurate dos arquivos, criando-os a partir dos recursos padrão quando ausentes
+- [x] 3.4 Implementar `ReasonCatalogValidator` cobrindo id duplicado na categoria, id vazio, nome de exibição vazio, duração ausente, unidade inválida, duração não positiva e categoria desconhecida
+- [x] 3.5 Escrever testes unitários do validador, incluindo o caso de ids iguais em categorias diferentes ser válido
+- [x] 3.6 Implementar `ReasonCatalog` com busca por categoria e por id, e filtragem por permissão do autor
+- [x] 3.7 Implementar a troca atômica de configuração: carrega e valida em objetos novos, e só então substitui a referência em vigor
+- [x] 3.8 Escrever teste unitário provando que uma recarga inválida preserva o catálogo anterior intacto
+- [x] 3.9 Definir o `messages.yml` padrão com todas as chaves: confirmações, erros, permissões, telas de rejeição, avisos de mute, anúncios, rótulos de estado e de janela de relatório
+- [x] 3.10 Implementar `MessageService` com resolução de chave, fallback para o padrão embutido, aviso de chave ausente registrado uma única vez, e suporte a mensagem em lista e a mensagem vazia como desligada
+- [x] 3.11 Implementar a substituição de placeholders com prefixo global, deixando placeholder desconhecido literal e registrando o aviso uma única vez por chave
+- [x] 3.12 Implementar a renderização MiniMessage com degradação para texto sem formatação quando a tag for malformada, registrando a chave defeituosa
+- [x] 3.13 Implementar a formatação de data e hora com padrão e fuso configuráveis, convertendo a partir de UTC
+- [x] 3.14 Escrever testes unitários de `MessageService`: substituição, placeholder desconhecido, chave ausente, tag malformada, lista de linhas e mensagem desligada
+- [x] 3.15 Definir o `gui.yml` padrão com títulos, tamanhos, slots, ícones e textos de item das GUIs de categoria, motivo, histórico e relatório
 
 ## 4. Persistência MySQL
 

@@ -11,8 +11,10 @@ dependencies {
     testImplementation(libs.junit.jupiter)
     testRuntimeOnly(libs.junit.platform.launcher)
     testImplementation(libs.assertj.core)
-    testCompileOnly(libs.adventure.api)
-    testCompileOnly(libs.adventure.minimessage)
+    // Adventure is compileOnly for main (Paper/Velocity provide it at runtime),
+    // but tests run standalone and need it on the runtime classpath too.
+    testImplementation(libs.adventure.api)
+    testImplementation(libs.adventure.minimessage)
 
     testImplementation(platform(libs.testcontainers.bom))
     testImplementation(libs.testcontainers.junit.jupiter)

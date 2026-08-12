@@ -1,0 +1,32 @@
+# Each reason's id only needs to be unique within its own category — "spam" can
+# exist under both ban and mute. duration accepts "n" (permanent) or a
+# quantity+unit sequence such as 30d or 1h30m.
+reasons:
+  ban:
+    - id: hacking
+      display-name: "Uso de cliente ilegal"
+      duration: "30d"
+      icon: DIAMOND_SWORD
+      description: "Uso comprovado de cliente modificado ou hacks"
+      permission: "spunish.reason.ban.hacking"
+    - id: griefing
+      display-name: "Griefing"
+      duration: "7d"
+      icon: TNT
+      description: "Destruição ou alteração não autorizada de construções"
+    - id: cheating-severe
+      display-name: "Cheating grave / reincidência"
+      duration: "n"
+      icon: BARRIER
+      description: "Reincidência grave; punição permanente"
+  mute:
+    - id: spam
+      display-name: "Spam no chat"
+      duration: "1h"
+      icon: PAPER
+      description: "Envio repetitivo de mensagens"
+    - id: toxicity
+      display-name: "Toxicidade"
+      duration: "1d"
+      icon: REDSTONE
+      description: "Ofensas ou discurso de ódio no chat"

@@ -1,0 +1,54 @@
+database:
+  host: localhost
+  port: 3306
+  database: spunish
+  user: spunish
+  password: "changeme"
+  table-prefix: "sp_"
+  use-ssl: false
+  pool:
+    maximum-pool-size: 10
+    minimum-idle: 2
+    connection-timeout-ms: 5000
+    max-lifetime-ms: 1800000
+  query-timeout-ms: 5000
+
+server:
+  # Blank means "derive a stable identifier and warn" — see punishment/network-sync.
+  id: ""
+
+sync:
+  poll-interval-ms: 2000
+  overlap-ms: 1000
+  event-retention-ms: 300000
+
+fail-mode:
+  # DENY: refuse the action when storage is unavailable and the state cannot be
+  # determined. ALLOW: let it through. Login defaults to DENY (a banned player
+  # must not slip in during an outage); chat defaults to ALLOW.
+  login: DENY
+  chat: ALLOW
+
+retention:
+  enabled: false
+  retention-days: 365
+
+mute:
+  blocked-commands:
+    - msg
+    - tell
+    - reply
+    - w
+    - r
+    - mail
+  warning-cooldown-ms: 3000
+
+report:
+  cooldown-ms: 5000
+  cache-duration-ms: 30000
+  ranking-limit: 10
+
+# Maximum duration a staffer holding spunish.limit.<key> may apply, including
+# for the permanent case. A staffer matching no entry has no restriction.
+duration-limits:
+  trial: 7d
