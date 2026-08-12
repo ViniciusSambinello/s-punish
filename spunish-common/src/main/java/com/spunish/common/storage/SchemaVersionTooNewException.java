@@ -7,6 +7,8 @@ package com.spunish.common.storage;
  */
 public final class SchemaVersionTooNewException extends RuntimeException {
 
+    private static final long serialVersionUID = 1L;
+
     public SchemaVersionTooNewException(int databaseVersion, int supportedVersion) {
         super("Database schema version " + databaseVersion + " is newer than the "
                 + supportedVersion + " this plugin version supports. Refusing to start — update the plugin.");

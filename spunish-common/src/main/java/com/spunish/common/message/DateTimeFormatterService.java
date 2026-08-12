@@ -20,4 +20,8 @@ public final class DateTimeFormatterService {
     public String format(Instant instant) {
         return formatter.format(instant);
     }
+
+    public ZoneId zone() {
+        return formatter.getZone();
+    }
 }

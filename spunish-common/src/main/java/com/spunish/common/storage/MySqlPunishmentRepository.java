@@ -38,7 +38,32 @@ public final class MySqlPunishmentRepository implements PunishmentRepository {
 
     @Override
     public CompletableFuture<Punishment> insert(InsertPunishmentCommand command) {
-        return ioExecutor.submit(() -> insertBlocking(command));
+        return ioExecutor.submit(() -> {
+            try (Connection connection = dataSource.getConnection()) {
+                return insertOnConnection(connection, command);
+            }
+        });
+    }
+
+    @Override
+    public CompletableFuture<OverrideResult> insertWithOverride(
+            InsertPunishmentCommand newPunishment, long previousPunishmentId, Actor revoker, Instant revokedAt, String revokeReason) {
+        return ioExecutor.submit(() -> {
+            try (Connection connection = dataSource.getConnection()) {
+                connection.setAutoCommit(false);
+                try {
+                    Punishment revoked = revokeOnConnection(connection, previousPunishmentId, revoker, revokedAt, revokeReason);
+                    Punishment applied = insertOnConnection(connection, newPunishment);
+                    connection.commit();
+                    return new OverrideResult(applied, revoked);
+                } catch (SQLException | RuntimeException e) {
+                    connection.rollback();
+                    throw e;
+                } finally {
+                    connection.setAutoCommit(true);
+                }
+            }
+        });
     }
 
     /**
@@ -48,7 +73,7 @@ public final class MySqlPunishmentRepository implements PunishmentRepository {
      * upsert is driven by login (see {@link ProfileRepository}, task 4.6 /
      * section 7's pre-login listener), not by being punished.
      */
-    private Punishment insertBlocking(InsertPunishmentCommand command) throws SQLException {
+    private Punishment insertOnConnection(Connection connection, InsertPunishmentCommand command) throws SQLException {
         if (command.actor() instanceof com.spunish.common.domain.SystemActor) {
             throw new IllegalArgumentException("A punishment cannot be applied by the system actor");
         }
@@ -61,8 +86,7 @@ public final class MySqlPunishmentRepository implements PunishmentRepository {
         SQLException lastDuplicate = null;
         for (int attempt = 0; attempt < MAX_PUBLIC_ID_ATTEMPTS; attempt++) {
             String publicId = publicIdGenerator.generate();
-            try (Connection connection = dataSource.getConnection();
-                    PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, publicId);
                 statement.setString(2, command.category().name());
                 statement.setBytes(3, UuidBinary.toBytes(command.targetUuid()));
@@ -139,30 +163,64 @@ public final class MySqlPunishmentRepository implements PunishmentRepository {
     @Override
     public CompletableFuture<Boolean> revoke(long punishmentId, Actor revoker, Instant revokedAt, String revokeReason) {
         return ioExecutor.submit(() -> {
-            ActorColumns.Mapped mapped = ActorColumns.from(revoker);
-            String sql = "UPDATE `" + tables.punishments() + "` SET "
-                    + "revoker_type = ?, revoker_uuid = ?, revoker_name = ?, revoked_at = ?, revoke_reason = ? "
-                    + "WHERE id = ? AND revoked_at IS NULL";
-            try (Connection connection = dataSource.getConnection();
-                    PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(1, mapped.type());
-                setNullableBytes(statement, 2, mapped.uuid());
-                statement.setString(3, mapped.name());
-                statement.setTimestamp(4, Timestamp.from(revokedAt));
-                if (revokeReason == null) {
-                    statement.setNull(5, Types.VARCHAR);
-                } else {
-                    statement.setString(5, revokeReason);
+            try (Connection connection = dataSource.getConnection()) {
+                try {
+                    revokeOnConnection(connection, punishmentId, revoker, revokedAt, revokeReason);
+                    return true;
+                } catch (AlreadyRevokedOrMissingException notApplied) {
+                    return false;
                 }
-                statement.setLong(6, punishmentId);
-                return statement.executeUpdate() == 1;
             }
         });
     }
 
+    /**
+     * @throws AlreadyRevokedOrMissingException if the row did not exist or was
+     *                                           already revoked — the {@code WHERE revoked_at IS NULL} guard matched nothing.
+     */
+    private Punishment revokeOnConnection(
+            Connection connection, long punishmentId, Actor revoker, Instant revokedAt, String revokeReason) throws SQLException {
+        ActorColumns.Mapped mapped = ActorColumns.from(revoker);
+        String updateSql = "UPDATE `" + tables.punishments() + "` SET "
+                + "revoker_type = ?, revoker_uuid = ?, revoker_name = ?, revoked_at = ?, revoke_reason = ? "
+                + "WHERE id = ? AND revoked_at IS NULL";
+        try (PreparedStatement statement = connection.prepareStatement(updateSql)) {
+            statement.setString(1, mapped.type());
+            setNullableBytes(statement, 2, mapped.uuid());
+            statement.setString(3, mapped.name());
+            statement.setTimestamp(4, Timestamp.from(revokedAt));
+            if (revokeReason == null) {
+                statement.setNull(5, Types.VARCHAR);
+            } else {
+                statement.setString(5, revokeReason);
+            }
+            statement.setLong(6, punishmentId);
+            if (statement.executeUpdate() != 1) {
+                throw new AlreadyRevokedOrMissingException(punishmentId);
+            }
+        }
+        try (PreparedStatement select = connection.prepareStatement(
+                "SELECT " + COLUMNS + " FROM `" + tables.punishments() + "` WHERE id = ?")) {
+            select.setLong(1, punishmentId);
+            try (ResultSet rs = select.executeQuery()) {
+                rs.next();
+                return PunishmentRowMapper.mapRow(rs);
+            }
+        }
+    }
+
+    private static final class AlreadyRevokedOrMissingException extends SQLException {
+
+        private static final long serialVersionUID = 1L;
+
+        AlreadyRevokedOrMissingException(long punishmentId) {
+            super("Punishment " + punishmentId + " was already revoked or does not exist");
+        }
+    }
+
     @Override
     public CompletableFuture<List<Punishment>> findHistory(
-            UUID targetUuid, Optional<PunishmentCategory> category, int page, int pageSize) {
+            UUID targetUuid, Optional<PunishmentCategory> category, int limit, int offset) {
         return ioExecutor.submit(() -> {
             StringBuilder sql = new StringBuilder(
                     "SELECT " + COLUMNS + " FROM `" + tables.punishments() + "` WHERE target_uuid = ?");
@@ -176,8 +234,8 @@ public final class MySqlPunishmentRepository implements PunishmentRepository {
                 if (category.isPresent()) {
                     statement.setString(index++, category.get().name());
                 }
-                statement.setInt(index++, Math.max(0, pageSize));
-                statement.setInt(index, Math.max(0, page) * Math.max(0, pageSize));
+                statement.setInt(index++, Math.max(0, limit));
+                statement.setInt(index, Math.max(0, offset));
 
                 List<Punishment> results = new ArrayList<>();
                 try (ResultSet rs = statement.executeQuery()) {

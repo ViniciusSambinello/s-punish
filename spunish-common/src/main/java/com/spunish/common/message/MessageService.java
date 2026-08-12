@@ -6,6 +6,7 @@ import org.spongepowered.configurate.ConfigurationNode;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -80,6 +81,16 @@ public final class MessageService {
 
     public String formatInstant(Instant instant) {
         return snapshot.get().dateTimeFormatter().format(instant);
+    }
+
+    /**
+     * The single configured zone used both for rendering instants and for
+     * computing calendar-aligned report windows (see {@code ReportWindowCalculator}) —
+     * there is deliberately only one "configured zone" in this plugin, not a
+     * separate one per concern.
+     */
+    public ZoneId zone() {
+        return snapshot.get().dateTimeFormatter().zone();
     }
 
     private List<String> substitutedLines(String key, Map<String, String> placeholders) {

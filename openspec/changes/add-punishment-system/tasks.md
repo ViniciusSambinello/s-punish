@@ -58,20 +58,20 @@
 
 ## 5. Serviços de punição em `spunish-common`
 
-- [ ] 5.1 Implementar `PunishmentIssueService` orquestrando validação, aplicação e persistência, retornando um resultado tipado de sucesso ou de recusa
-- [ ] 5.2 Implementar as regras de recusa: autopunição sem `spunish.punish.self`, alvo com `spunish.exempt.<category>`, e punição ativa já existente na mesma categoria
-- [ ] 5.3 Implementar a sobreposição autorizada por `spunish.punish.override`, revogando a punição anterior com autoria de sistema dentro da mesma transação
-- [ ] 5.4 Implementar a checagem de limite de duração por permissão, recusando inclusive o caso permanente acima do teto
-- [ ] 5.5 Implementar a checagem de permissão de categoria e de motivo restrito
-- [ ] 5.6 Garantir que falha de persistência aborte a punição sem kickar nem mutar, retornando recusa por erro interno
-- [ ] 5.7 Escrever testes unitários das regras de precedência com repositório em memória: autopunição, isenção, duplicada, sobreposição, limite de duração e categorias diferentes coexistindo
-- [ ] 5.8 Implementar `PunishmentRevokeService` com validação de punição ativa, permissão por categoria e motivo opcional
-- [ ] 5.9 Escrever testes unitários de revogação: sem punição ativa, sem permissão, revogação por console e preservação do registro original
-- [ ] 5.10 Implementar `PunishmentHistoryService` retornando páginas já resolvidas em `PunishmentState`
-- [ ] 5.11 Implementar `ReportService` com o cálculo das janelas diária, semanal, mensal e desde o início no fuso configurado, convertendo os limites para instantes UTC
-- [ ] 5.12 Escrever testes unitários das janelas de relatório, incluindo o corte de início do dia no fuso configurado e não em UTC
-- [ ] 5.13 Implementar o cache de relatório com duração configurável e o cooldown por usuário
-- [ ] 5.14 Implementar o cálculo da taxa de revogação e garantir que punições revogadas continuem contadas no total da janela
+- [x] 5.1 Implementar `PunishmentIssueService` orquestrando validação, aplicação e persistência, retornando um resultado tipado de sucesso ou de recusa
+- [x] 5.2 Implementar as regras de recusa: autopunição sem `spunish.punish.self`, alvo com `spunish.exempt.<category>`, e punição ativa já existente na mesma categoria
+- [x] 5.3 Implementar a sobreposição autorizada por `spunish.punish.override`, revogando a punição anterior com autoria de sistema dentro da mesma transação
+- [x] 5.4 Implementar a checagem de limite de duração por permissão, recusando inclusive o caso permanente acima do teto
+- [x] 5.5 Implementar a checagem de permissão de categoria e de motivo restrito
+- [x] 5.6 Garantir que falha de persistência aborte a punição sem kickar nem mutar, retornando recusa por erro interno
+- [x] 5.7 Escrever testes unitários das regras de precedência com repositório em memória: autopunição, isenção, duplicada, sobreposição, limite de duração e categorias diferentes coexistindo
+- [x] 5.8 Implementar `PunishmentRevokeService` com validação de punição ativa, permissão por categoria e motivo opcional
+- [x] 5.9 Escrever testes unitários de revogação: sem punição ativa, sem permissão, revogação por console e preservação do registro original
+- [x] 5.10 Implementar `PunishmentHistoryService` retornando páginas já resolvidas em `PunishmentState`
+- [x] 5.11 Implementar `ReportService` com o cálculo das janelas diária, semanal, mensal e desde o início no fuso configurado, convertendo os limites para instantes UTC
+- [x] 5.12 Escrever testes unitários das janelas de relatório, incluindo o corte de início do dia no fuso configurado e não em UTC
+- [x] 5.13 Implementar o cache de relatório com duração configurável e o cooldown por usuário
+- [x] 5.14 Implementar o cálculo da taxa de revogação e garantir que punições revogadas continuem contadas no total da janela
 
 ## 6. Sincronização de rede
 
