@@ -11,8 +11,6 @@ tasks.processResources {
 tasks.shadowJar {
     archiveClassifier.set("")
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
-    // Bundled dependencies are relocated so another plugin on the same server
-    // bundling a different version of the same library can never collide with ours.
     relocate("com.zaxxer.hikari", "com.spunish.libs.hikari")
     relocate("com.mysql", "com.spunish.libs.mysql")
     relocate("com.google.protobuf", "com.spunish.libs.protobuf")
@@ -26,10 +24,6 @@ tasks.build {
     dependsOn(tasks.shadowJar)
 }
 
-// The smoke test loads the shaded jar in an isolated classloader and opens a
-// real connection through it, so it needs the jar to exist and gets its own
-// Testcontainers-backed source set/task for the same reason spunish-common's
-// integration tests do: it needs Docker, which local checks should never assume.
 sourceSets {
     create("integrationTest") {
         java.srcDir("src/integrationTest/java")

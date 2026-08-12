@@ -5,8 +5,6 @@ plugins {
 tasks.shadowJar {
     archiveClassifier.set("")
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
-    // Bundled dependencies are relocated so another plugin on the same proxy
-    // bundling a different version of the same library can never collide with ours.
     relocate("com.zaxxer.hikari", "com.spunish.libs.hikari")
     relocate("com.mysql", "com.spunish.libs.mysql")
     relocate("com.google.protobuf", "com.spunish.libs.protobuf")
