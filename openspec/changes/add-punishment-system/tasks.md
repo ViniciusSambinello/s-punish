@@ -164,9 +164,9 @@
 
 ## 13. CI e release
 
-- [ ] 13.1 Criar o workflow de CI executando `./gradlew build` em JDK 25, com os testes Testcontainers, em push e em pull request
-- [ ] 13.2 Adicionar a validação de Conventional Commits no CI, com os escopos `common`, `paper`, `velocity`, `docs` e `build`
-- [ ] 13.3 Adicionar o cache de dependências do Gradle e a publicação dos relatórios de teste como artefato do workflow
-- [ ] 13.4 Criar o workflow de release disparado por tag `v*`, publicando os jars do Paper e do Velocity na GitHub Release
-- [ ] 13.5 Proteger `main` exigindo CI verde e pull request, e documentar a regra em `CONTRIBUTING.md`
-- [ ] 13.6 Fechar a versão `0.1.0`: atualizar `CHANGELOG.md`, fixar a versão em `gradle.properties`, abrir o PR de `develop` para `main` e criar a tag de release
+- [x] 13.1 Criar o workflow de CI executando `./gradlew build` em JDK 25, com os testes Testcontainers, em push e em pull request
+- [x] 13.2 Adicionar a validação de Conventional Commits no CI, com os escopos `common`, `paper`, `velocity`, `docs` e `build`
+- [x] 13.3 Adicionar o cache de dependências do Gradle e a publicação dos relatórios de teste como artefato do workflow
+- [x] 13.4 Criar o workflow de release disparado por tag `v*`, publicando os jars do Paper e do Velocity na GitHub Release
+- [x] 13.5 Proteger `main` exigindo CI verde e pull request, e documentar a regra em `CONTRIBUTING.md` (regra documentada; a configuração de branch protection em si é um ajuste nas configurações do repositório no GitHub, não um arquivo versionável — não aplicada nesta sessão, ver relato final)
+- [ ] 13.6 Fechar a versão `0.1.0`: atualizar `CHANGELOG.md`, fixar a versão em `gradle.properties`, abrir o PR de `develop` para `main` e criar a tag de release (decisão do usuário — ver relato final)
