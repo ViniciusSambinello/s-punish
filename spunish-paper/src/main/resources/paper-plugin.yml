@@ -1,4 +1,4 @@
-name: SPunish
+name: s-punish
 version: '${version}'
 main: com.spunish.paper.SPunishPlugin
 api-version: '26.2'
@@ -45,5 +45,5 @@ permissions:
     description: Receive staff punishment/revocation announcements.
     default: op
   spunish.admin.reload:
-    description: Reload SPunish's configuration.
+    description: Reload s-punish's configuration.
     default: op
