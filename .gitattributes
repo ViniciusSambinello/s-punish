@@ -1,0 +1,18 @@
+* text=auto eol=lf
+
+*.java text
+*.kts text
+*.kt text
+*.yml text
+*.yaml text
+*.md text
+*.properties text
+*.toml text
+
+*.jar binary
+*.png binary
+*.jpg binary
+
+/gradlew text eol=lf
+/gradlew.bat text eol=crlf
+gradle/wrapper/gradle-wrapper.jar binary

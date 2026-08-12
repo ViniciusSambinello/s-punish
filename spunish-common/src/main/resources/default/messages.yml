@@ -1,0 +1,153 @@
+# Every value under `messages:` may be a single line, a list of lines (sent in
+# order), or blank/empty — which turns that message off entirely. All of them
+# are MiniMessage (https://docs.advntr.dev/minimessage/format.html). {token}
+# placeholders are substituted per-message; an unknown {token} is left literal.
+# {prefix} is available everywhere and comes from the `prefix` key below.
+
+prefix: "<gray>[<gold>s-punish</gold>]</gray> "
+
+date-time:
+  pattern: "dd/MM/yyyy HH:mm"
+  zone: "UTC"
+
+duration:
+  max-units: 2
+  permanent-text: "permanent"
+  units:
+    s: "s"
+    m: "m"
+    h: "h"
+    d: "d"
+    w: "w"
+    mo: "mo"
+    y: "y"
+
+state:
+  active: "<green>Active</green>"
+  expired: "<gray>Expired</gray>"
+  revoked: "<yellow>Revoked</yellow>"
+
+report:
+  window:
+    daily: "Daily"
+    weekly: "Weekly"
+    monthly: "Monthly"
+    all-time: "All-time"
+
+messages:
+  general:
+    no-permission: "{prefix}<red>You do not have permission to do that.</red>"
+    player-not-found: "{prefix}<red>Player '{player}' not found.</red>"
+    invalid-category: "{prefix}<red>Invalid category. Use: ban, mute.</red>"
+    invalid-time: "{prefix}<red>Invalid time. Use 'n' for permanent, or something like 30d, 1h30m.</red>"
+    internal-error: "{prefix}<red>An internal error occurred. The staff has been notified.</red>"
+    storage-unavailable: "{prefix}<red>Storage is temporarily unavailable. Please try again shortly.</red>"
+    console-not-supported: "{prefix}<red>This command can only be used by a player.</red>"
+
+  punish:
+    usage:
+      - "{prefix}<red>Incorrect usage:</red>"
+      - "<gray>/punish <player></gray>"
+      - "<gray>/punish <player> <category></gray>"
+      - "<gray>/punish <player> <category> <reason> <time></gray>"
+    console-requires-full-form: "{prefix}<red>The console can only use the full form: /punish <player> <category> <reason> <time>.</red>"
+    reason-not-found: "{prefix}<red>Reason '{reason-id}' not found for category {category}.</red>"
+    self-punish-denied: "{prefix}<red>You cannot punish yourself.</red>"
+    target-exempt: "{prefix}<red>{target} is exempt from this punishment.</red>"
+    already-active: "{prefix}<red>{target} already has an active punishment in this category (remaining: {duration-remaining}).</red>"
+    reason-permission-denied: "{prefix}<red>You do not have permission to use that reason.</red>"
+    duration-limit-exceeded: "{prefix}<red>You cannot apply a duration longer than {duration-limit}.</red>"
+    confirmation: "{prefix}<green>Punishment applied: {target} — {category} — {reason-display} ({duration}).</green>"
+    staff-announcement: "{prefix}<yellow>{actor} applied {category} to {target}: {reason-display} ({duration}).</yellow>"
+    public-announcement: "{prefix}<gray>{target} received a punishment.</gray>"
+
+  unpunish:
+    usage: "{prefix}<red>Usage: /{label} <player> [reason]</red>"
+    no-active-punishment: "{prefix}<red>{target} does not have an active punishment in this category.</red>"
+    confirmation: "{prefix}<green>{target}'s punishment was revoked.</green>"
+    staff-announcement: "{prefix}<yellow>{actor} revoked {target}'s punishment.</yellow>"
+
+  reload:
+    success: "{prefix}<green>Configuration reloaded successfully.</green>"
+    failure-header: "{prefix}<red>Configuration was not reloaded. Errors found:</red>"
+    failure-line: "<red> - {error}</red>"
+
+  screen:
+    ban:
+      - "<red><bold>You have been banned</bold></red>"
+      - "<gray>Reason:</gray> {reason-display}"
+      - "<gray>By:</gray> {actor}"
+      - "<gray>Expires in:</gray> {duration-remaining}"
+      - "<gray>Id:</gray> {punishment-id}"
+    mute-warning: "{prefix}<red>You are muted. Reason: {reason-display}. Remaining: {duration-remaining}.</red>"
+
+  history:
+    usage: "{prefix}<red>Usage: /history <player></red>"
+    empty: "{prefix}<gray>This player has no recorded punishments.</gray>"
+    console-header: "History for {target}:"
+    console-line: " #{punishment-id} [{category}] {reason-display} by {actor} on {applied-at} — {state}"
+
+  record:
+    usage: "{prefix}<red>Usage: /record <category> [staffer]</red>"
+    no-data: "{prefix}<gray>No punishments found in this window.</gray>"
+    cooldown: "{prefix}<red>Wait before generating another report ({cooldown-remaining}).</red>"
+
+  gui:
+    category:
+      title: "Select a category"
+      item:
+        ban:
+          name: "<red>Ban</red>"
+          lore:
+            - "<gray>Click to ban {target}</gray>"
+        mute:
+          name: "<yellow>Mute</yellow>"
+          lore:
+            - "<gray>Click to mute {target}</gray>"
+    reason:
+      title: "Select a reason"
+      back: "<gray>« Back</gray>"
+      previous-page: "<gray>« Previous page</gray>"
+      next-page: "<gray>Next page »</gray>"
+      item:
+        name: "<white>{reason-display}</white>"
+        lore:
+          - "<gray>Duration:</gray> {duration}"
+          - "<gray>Click to apply</gray>"
+    history:
+      title: "History of {target}"
+      previous-page: "<gray>« Previous page</gray>"
+      next-page: "<gray>Next page »</gray>"
+      filter-all: "<white>All</white>"
+      filter-ban: "<red>Bans only</red>"
+      filter-mute: "<yellow>Mutes only</yellow>"
+      entry:
+        name: "{state} {reason-display}"
+        lore:
+          - "<gray>Category:</gray> {category}"
+          - "<gray>By:</gray> {actor}"
+          - "<gray>Applied on:</gray> {applied-at}"
+          - "<gray>State:</gray> {state}"
+          - "<gray>Remaining:</gray> {duration-remaining}"
+      detail:
+        title: "Punishment details"
+        lore:
+          - "<gray>Id:</gray> {punishment-id}"
+          - "<gray>Origin server:</gray> {origin-server}"
+        revocation-lore:
+          - "<gray>Revoked by:</gray> {revoker}"
+          - "<gray>Revoked at:</gray> {revoked-at}"
+          - "<gray>Revoke reason:</gray> {revoke-reason}"
+    report:
+      title: "Report — {category}"
+      window-daily: "Daily"
+      window-weekly: "Weekly"
+      window-monthly: "Monthly"
+      window-all-time: "All-time"
+      total: "<white>Total:</white> {total}"
+      revocation-rate: "<white>Revocation rate:</white> {revocation-rate}%"
+      ranking-entry: "<gray>{rank}.</gray> {staffer} — {count}"
+      reason-entry: "<gray>{reason-display}:</gray> {count}"
+      recent-entry: "<gray>{applied-at}</gray> {reason-display} ({duration})"
+      more-entries: "<gray>... and more</gray>"
+      staffer-title: "Report for {staffer} — {category}"

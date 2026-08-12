@@ -1,0 +1,50 @@
+name: s-punish
+version: '${version}'
+main: com.spunish.paper.SPunishPlugin
+api-version: '26.2'
+description: Networked punishment system with MySQL persistence, a configurable reason catalog, and audit reporting.
+authors: [stenox]
+
+permissions:
+  spunish.punish:
+    description: Use /punish.
+    default: op
+  spunish.punish.ban:
+    description: Apply BAN punishments.
+    default: op
+  spunish.punish.mute:
+    description: Apply MUTE punishments.
+    default: op
+  spunish.punish.self:
+    description: Punish yourself.
+    default: false
+  spunish.punish.override:
+    description: Ignore exemptions and supersede an active punishment of the same category.
+    default: op
+  spunish.exempt.ban:
+    description: Be protected from BAN.
+    default: false
+  spunish.exempt.mute:
+    description: Be protected from MUTE.
+    default: false
+  spunish.unpunish.ban:
+    description: Revoke BAN punishments (/unban).
+    default: op
+  spunish.unpunish.mute:
+    description: Revoke MUTE punishments (/unmute).
+    default: op
+  spunish.record:
+    description: View your own /record report.
+    default: op
+  spunish.record.others:
+    description: View the general report and other staffers' reports.
+    default: op
+  spunish.history:
+    description: View any player's /history.
+    default: op
+  spunish.notify:
+    description: Receive staff punishment/revocation announcements.
+    default: op
+  spunish.admin.reload:
+    description: Reload s-punish's configuration.
+    default: op
