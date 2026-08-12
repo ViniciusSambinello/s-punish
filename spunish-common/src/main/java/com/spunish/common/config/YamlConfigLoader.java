@@ -5,9 +5,12 @@ import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.objectmapping.ObjectMapper;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -49,6 +52,28 @@ public final class YamlConfigLoader {
             return loaderFor(target).load();
         } catch (ConfigurateException e) {
             throw new ConfigLoadException("Could not parse " + target + ": " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Parses a bundled default resource on its own, independent of any file
+     * on disk — used as {@code MessageService}'s fallback tree for a key
+     * missing from the on-disk {@code messages.yml}, which must reflect the
+     * shipped defaults even if the user's file predates a newer key.
+     */
+    public static ConfigurationNode loadBundledDefaults(String resourcePath) {
+        try (InputStream in = YamlConfigLoader.class.getResourceAsStream(resourcePath)) {
+            if (in == null) {
+                throw new IllegalStateException("Missing bundled default resource: " + resourcePath);
+            }
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+            YamlConfigurationLoader loader = YamlConfigurationLoader.builder()
+                    .source(() -> reader)
+                    .defaultOptions(options -> options.serializers(builder -> builder.registerAnnotatedObjects(OBJECT_MAPPER_FACTORY)))
+                    .build();
+            return loader.load();
+        } catch (IOException e) {
+            throw new ConfigLoadException("Could not parse bundled resource " + resourcePath + ": " + e.getMessage(), e);
         }
     }
 

@@ -85,18 +85,18 @@
 
 ## 7. Módulo Paper — bootstrap e enforcement
 
-- [ ] 7.1 Criar o `paper-plugin.yml` e a classe principal, com a inicialização das configurações, do banco, das migrações e dos serviços, e recusa de habilitação quando o banco estiver inacessível
-- [ ] 7.2 Implementar as portas de plataforma do Paper: `PermissionChecker`, `AudienceResolver`, `PlayerKicker`, `MainThreadDispatcher` e `ServerIdentity`
-- [ ] 7.3 Implementar o desligamento limpo: encerrar o consumidor de sync, o executor de I/O e o pool de conexões
-- [ ] 7.4 Implementar o listener de pré-login: atualizar o perfil, verificar ban ativo, recusar com a tela configurável e carregar o estado de mute no cache
-- [ ] 7.5 Implementar o modo de falha configurável no pré-login, com padrão `DENY` e registro em log
-- [ ] 7.6 Implementar o listener de chat lendo apenas do cache, sem consulta ao armazenamento durante o evento
-- [ ] 7.7 Implementar o bloqueio dos comandos de comunicação configurados, resolvendo aliases registrados
-- [ ] 7.8 Implementar o modo de falha configurável no chat, com padrão `ALLOW`
-- [ ] 7.9 Implementar o cooldown configurável do aviso de mute
-- [ ] 7.10 Implementar o kick imediato do jogador online ao receber ban, tanto local quanto por evento de sync
-- [ ] 7.11 Implementar o listener de quit descartando o estado em cache
-- [ ] 7.12 Implementar a notificação de staff para `spunish.notify` e o anúncio público desligável, em punição e em revogação
+- [x] 7.1 Criar o `paper-plugin.yml` e a classe principal, com a inicialização das configurações, do banco, das migrações e dos serviços, e recusa de habilitação quando o banco estiver inacessível
+- [x] 7.2 Implementar as portas de plataforma do Paper: `PermissionChecker`, `AudienceResolver`, `PlayerKicker`, `MainThreadDispatcher` e `ServerIdentity`
+- [x] 7.3 Implementar o desligamento limpo: encerrar o consumidor de sync, o executor de I/O e o pool de conexões
+- [x] 7.4 Implementar o listener de pré-login: atualizar o perfil, verificar ban ativo, recusar com a tela configurável e carregar o estado de mute no cache
+- [x] 7.5 Implementar o modo de falha configurável no pré-login, com padrão `DENY` e registro em log
+- [x] 7.6 Implementar o listener de chat lendo apenas do cache, sem consulta ao armazenamento durante o evento
+- [x] 7.7 Implementar o bloqueio dos comandos de comunicação configurados, resolvendo aliases registrados
+- [x] 7.8 Implementar o modo de falha configurável no chat, com padrão `ALLOW`
+- [x] 7.9 Implementar o cooldown configurável do aviso de mute
+- [x] 7.10 Implementar o kick imediato do jogador online ao receber ban, tanto local quanto por evento de sync
+- [x] 7.11 Implementar o listener de quit descartando o estado em cache
+- [x] 7.12 Implementar a notificação de staff para `spunish.notify` e o anúncio público desligável, em punição e em revogação
 
 ## 8. Módulo Paper — comandos e tab complete
 

@@ -1,3 +1,9 @@
+tasks.processResources {
+    filesMatching("paper-plugin.yml") {
+        expand("version" to project.version)
+    }
+}
+
 dependencies {
     implementation(project(":spunish-common"))
     compileOnly(libs.paper.api)

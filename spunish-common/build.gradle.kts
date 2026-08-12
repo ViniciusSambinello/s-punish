@@ -1,3 +1,11 @@
+// java-library (rather than plain java, applied by root convention) so
+// `api()` can expose types like Configurate's ConfigurationNode, which
+// leaks through common's own public methods (YamlConfigLoader.loadNode(),
+// MessageService's constructor) and is used directly by spunish-paper.
+plugins {
+    `java-library`
+}
+
 // Testcontainers-backed tests get their own source set/task, kept out of
 // `test`/`build` on purpose: they need Docker, which a plain dev machine or
 // this repo's default local checks should never have to assume. CI (section 13)
@@ -11,10 +19,12 @@ sourceSets {
     }
 }
 
-val integrationTestImplementation by configurations.getting {
+val integrationTestImplementation = configurations.getByName("integrationTestImplementation") {
     extendsFrom(configurations.testImplementation.get())
 }
-configurations["integrationTestRuntimeOnly"].extendsFrom(configurations.testRuntimeOnly.get())
+configurations.getByName("integrationTestRuntimeOnly") {
+    extendsFrom(configurations.testRuntimeOnly.get())
+}
 
 tasks.register<Test>("integrationTest") {
     description = "Runs Testcontainers-backed integration tests. Requires Docker."
@@ -31,7 +41,7 @@ dependencies {
 
     implementation(libs.hikaricp)
     implementation(libs.mysql.connector)
-    implementation(libs.configurate.core)
+    api(libs.configurate.core)
     implementation(libs.configurate.yaml)
 
     testImplementation(platform(libs.junit.bom))
