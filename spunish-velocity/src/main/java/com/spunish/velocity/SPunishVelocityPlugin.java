@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Plugin(id = "spunish", name = "s-punish", version = "0.1.0-SNAPSHOT",
-        description = "Network-wide punishment enforcement at the proxy edge.")
+        description = "Network-wide punishment enforcement at the proxy edge.", authors = {"stenox"})
 public final class SPunishVelocityPlugin {
 
     private final ProxyServer server;

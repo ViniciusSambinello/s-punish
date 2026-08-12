@@ -3,6 +3,7 @@ version: '${version}'
 main: com.spunish.paper.SPunishPlugin
 api-version: '26.2'
 description: Networked punishment system with MySQL persistence, a configurable reason catalog, and audit reporting.
+authors: [stenox]
 
 permissions:
   spunish.punish:
