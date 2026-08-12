@@ -46,6 +46,7 @@ history-menu:
 
 report-menu:
   size: 54
+  summary-slot: 0
   window-daily:
     slot: 1
     icon: CLOCK

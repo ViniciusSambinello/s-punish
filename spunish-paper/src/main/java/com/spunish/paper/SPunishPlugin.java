@@ -8,6 +8,8 @@ import com.spunish.paper.command.PunishCommand;
 import com.spunish.paper.command.RecordCommand;
 import com.spunish.paper.command.ReloadCommand;
 import com.spunish.paper.command.UnpunishCommand;
+import com.spunish.paper.gui.MenuListener;
+import com.spunish.paper.gui.PaperMenuOpener;
 import com.spunish.paper.listener.ChatListener;
 import com.spunish.paper.listener.CommandBlockListener;
 import com.spunish.paper.listener.MuteWarningCooldown;
@@ -36,6 +38,7 @@ public final class SPunishPlugin extends JavaPlugin {
         pluginManager.registerEvents(new ChatListener(services, muteWarningCooldown), this);
         pluginManager.registerEvents(new CommandBlockListener(services, getServer(), muteWarningCooldown), this);
         pluginManager.registerEvents(new QuitListener(services, muteWarningCooldown), this);
+        pluginManager.registerEvents(new MenuListener(), this);
 
         registerCommands();
 
@@ -44,7 +47,7 @@ public final class SPunishPlugin extends JavaPlugin {
 
     private void registerCommands() {
         PlayerResolver playerResolver = new PlayerResolver(getServer(), services.profileRepository());
-        MenuOpener menuOpener = MenuOpener.stub();
+        MenuOpener menuOpener = new PaperMenuOpener(services);
 
         registerCommand("punish", "Apply a punishment to a player.",
                 new PunishCommand(services, playerResolver, menuOpener));

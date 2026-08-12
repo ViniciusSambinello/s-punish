@@ -15,12 +15,12 @@ import java.util.logging.Level;
  * sender, and resolving a target name with a consistent not-found /
  * internal-error fallback.
  */
-final class CommandSupport {
+public final class CommandSupport {
 
     private CommandSupport() {
     }
 
-    static void send(SPunishServices services, CommandSender sender, String key, Map<String, String> placeholders) {
+    public static void send(SPunishServices services, CommandSender sender, String key, Map<String, String> placeholders) {
         List<Component> lines = services.messageService().render(key, placeholders);
         for (Component line : lines) {
             sender.sendMessage(line);
@@ -32,7 +32,7 @@ final class CommandSupport {
      *                 callers must hop back to the main thread themselves before
      *                 touching any Bukkit API that requires it.
      */
-    static void resolveTarget(
+    public static void resolveTarget(
             SPunishServices services, PlayerResolver resolver, CommandSender sender, String name,
             Consumer<PunishmentTarget> onFound) {
         resolver.resolve(name)

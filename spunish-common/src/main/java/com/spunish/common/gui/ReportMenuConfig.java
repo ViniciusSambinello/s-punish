@@ -8,6 +8,7 @@ import java.util.List;
 @ConfigSerializable
 public record ReportMenuConfig(
         int size,
+        @Setting("summary-slot") int summarySlot,
         @Setting("window-daily") GuiItemSlot windowDaily,
         @Setting("window-weekly") GuiItemSlot windowWeekly,
         @Setting("window-monthly") GuiItemSlot windowMonthly,

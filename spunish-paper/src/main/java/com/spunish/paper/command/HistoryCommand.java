@@ -1,7 +1,6 @@
 package com.spunish.paper.command;
 
 import com.spunish.common.domain.Actor;
-import com.spunish.common.domain.PunishmentState;
 import com.spunish.common.domain.PunishmentTarget;
 import com.spunish.common.message.PunishmentPlaceholders;
 import com.spunish.common.service.HistoryEntry;
@@ -81,17 +80,9 @@ public final class HistoryCommand implements BasicCommand {
         for (HistoryEntry entry : page.entries()) {
             Map<String, String> placeholders = new HashMap<>(
                     PunishmentPlaceholders.build(entry.punishment(), services.messageService(), now));
-            placeholders.put("state", stateLabel(entry.state()));
+            placeholders.put("state", services.messageService().stateLabelText(entry.state()));
             CommandSupport.send(services, sender, "history.console-line", placeholders);
         }
-    }
-
-    private static String stateLabel(PunishmentState state) {
-        return switch (state) {
-            case PunishmentState.Active ignored -> "Active";
-            case PunishmentState.Expired ignored -> "Expired";
-            case PunishmentState.Revoked ignored -> "Revoked";
-        };
     }
 
     @Override

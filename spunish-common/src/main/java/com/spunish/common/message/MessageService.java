@@ -1,6 +1,8 @@
 package com.spunish.common.message;
 
+import com.spunish.common.domain.PunishmentState;
 import com.spunish.common.duration.DurationFormatter;
+import com.spunish.common.duration.PunishmentDuration;
 import net.kyori.adventure.text.Component;
 import org.spongepowered.configurate.ConfigurationNode;
 
@@ -74,8 +76,32 @@ public final class MessageService {
         return durationFormatter.format(remaining, snapshot.get().durationFormat());
     }
 
+    public String formatDuration(PunishmentDuration duration) {
+        return durationFormatter.format(duration, snapshot.get().durationFormat());
+    }
+
     public String formatInstant(Instant instant) {
         return snapshot.get().dateTimeFormatter().format(instant);
+    }
+
+    /**
+     * The {@code active}/{@code expired}/{@code revoked} label a punishment's
+     * current state is always shown as (history and reporting specs) — the raw
+     * MiniMessage source, meant to be embedded as a {@code {state}} placeholder
+     * value and rendered together with the message that embeds it.
+     */
+    public String stateLabelText(PunishmentState state) {
+        String key = switch (state) {
+            case PunishmentState.Active ignored -> "active";
+            case PunishmentState.Expired ignored -> "expired";
+            case PunishmentState.Revoked ignored -> "revoked";
+        };
+        ConfigurationNode node = snapshot.get().root().node("state", key);
+        if (isAbsent(node)) {
+            node = defaults.node("state", key);
+        }
+        String text = node.getString();
+        return text != null ? text : "";
     }
 
     /**

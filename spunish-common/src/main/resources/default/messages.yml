@@ -122,17 +122,22 @@ messages:
       filter-ban: "<red>Bans only</red>"
       filter-mute: "<yellow>Mutes only</yellow>"
       entry:
-        name: "{state-icon} {reason-display}"
+        name: "{state} {reason-display}"
         lore:
           - "<gray>Category:</gray> {category}"
           - "<gray>By:</gray> {actor}"
           - "<gray>Applied on:</gray> {applied-at}"
           - "<gray>State:</gray> {state}"
+          - "<gray>Remaining:</gray> {duration-remaining}"
       detail:
         title: "Punishment details"
         lore:
           - "<gray>Id:</gray> {punishment-id}"
           - "<gray>Origin server:</gray> {origin-server}"
+        revocation-lore:
+          - "<gray>Revoked by:</gray> {revoker}"
+          - "<gray>Revoked at:</gray> {revoked-at}"
+          - "<gray>Revoke reason:</gray> {revoke-reason}"
     report:
       title: "Report — {category}"
       window-daily: "Daily"
@@ -143,4 +148,6 @@ messages:
       revocation-rate: "<white>Revocation rate:</white> {revocation-rate}%"
       ranking-entry: "<gray>{rank}.</gray> {staffer} — {count}"
       reason-entry: "<gray>{reason-display}:</gray> {count}"
+      recent-entry: "<gray>{applied-at}</gray> {reason-display} ({duration})"
+      more-entries: "<gray>... and more</gray>"
       staffer-title: "Report for {staffer} — {category}"

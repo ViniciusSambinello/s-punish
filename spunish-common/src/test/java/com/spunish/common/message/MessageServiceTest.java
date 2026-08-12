@@ -126,7 +126,7 @@ class MessageServiceTest {
 
     @Test
     void formatsPermanentDuration() {
-        assertThat(service.formatDuration(null)).isEqualTo("forever");
+        assertThat(service.formatDuration((java.time.Duration) null)).isEqualTo("forever");
     }
 
     @Test

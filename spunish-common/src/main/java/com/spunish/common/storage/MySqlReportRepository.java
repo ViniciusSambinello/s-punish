@@ -70,8 +70,8 @@ public final class MySqlReportRepository implements ReportRepository {
     public CompletableFuture<List<StaffRanking>> rankByStaff(PunishmentCategory category, Instant from, Instant to, int limit) {
         Filter filter = new Filter(category, from, to, null);
         return ioExecutor.submit(() -> {
-            String sql = "SELECT actor_uuid, COUNT(*) AS cnt FROM `" + tables.punishments() + "` WHERE "
-                    + filter.whereClause() + " AND actor_type = 'PLAYER' "
+            String sql = "SELECT actor_uuid, MAX(actor_name) AS actor_name, COUNT(*) AS cnt FROM `"
+                    + tables.punishments() + "` WHERE " + filter.whereClause() + " AND actor_type = 'PLAYER' "
                     + "GROUP BY actor_uuid ORDER BY cnt DESC LIMIT ?";
             try (Connection connection = dataSource.getConnection();
                     PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -80,7 +80,8 @@ public final class MySqlReportRepository implements ReportRepository {
                 List<StaffRanking> ranking = new ArrayList<>();
                 try (ResultSet rs = statement.executeQuery()) {
                     while (rs.next()) {
-                        ranking.add(new StaffRanking(UuidBinary.fromBytes(rs.getBytes("actor_uuid")), rs.getLong("cnt")));
+                        ranking.add(new StaffRanking(
+                                UuidBinary.fromBytes(rs.getBytes("actor_uuid")), rs.getString("actor_name"), rs.getLong("cnt")));
                     }
                 }
                 return ranking;

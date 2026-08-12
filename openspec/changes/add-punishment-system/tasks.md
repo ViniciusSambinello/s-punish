@@ -113,21 +113,21 @@
 
 ## 9. Módulo Paper — GUIs
 
-- [ ] 9.1 Implementar a abstração mínima de menu: holder próprio, roteamento de clique, cancelamento do arraste e do clique em item, e paginação
-- [ ] 9.2 Implementar a construção de itens a partir de `gui.yml`, com título, ícone, nome e descrição resolvidos pelo `MessageService`
-- [ ] 9.3 Implementar a GUI de categorias, exibindo apenas as categorias que o autor pode aplicar e preservando o alvo ao encaminhar
-- [ ] 9.4 Implementar a GUI de motivos, exibindo nome e duração, ocultando motivos sem permissão, e aplicando a punição com a duração padrão ao clicar
-- [ ] 9.5 Implementar a paginação da GUI de motivos e o controle de retorno, presente somente quando aberta a partir da GUI de categorias
-- [ ] 9.6 Garantir que fechar qualquer GUI sem selecionar não crie nenhum registro
-- [ ] 9.7 Implementar a GUI de histórico com carga por página sob demanda, ordenação decrescente e rótulo de estado distinguível por ícone ou cor
-- [ ] 9.8 Implementar no histórico a exibição de tempo restante, texto de permanente, e dados de revogação quando houver
-- [ ] 9.9 Implementar o filtro de categoria do histórico, reiniciando a paginação na primeira página
-- [ ] 9.10 Implementar o detalhe de uma punição com identificador e servidor de origem
-- [ ] 9.11 Implementar a GUI de relatório com as quatro janelas selecionáveis, destaque da janela ativa e recarga assíncrona sem fechar a GUI
-- [ ] 9.12 Implementar no relatório geral o total, a divisão por estado, o ranking por autor e a distribuição por motivo
-- [ ] 9.13 Implementar o ranking paginado ou truncado de forma configurável, indicando a existência de mais entradas
-- [ ] 9.14 Implementar a GUI de relatório individual do staffer, com a lista das punições mais recentes aplicadas por ele
-- [ ] 9.15 Implementar o texto configurável de ausência de dados nas GUIs de histórico e de relatório
+- [x] 9.1 Implementar a abstração mínima de menu: holder próprio, roteamento de clique, cancelamento do arraste e do clique em item, e paginação
+- [x] 9.2 Implementar a construção de itens a partir de `gui.yml`, com título, ícone, nome e descrição resolvidos pelo `MessageService`
+- [x] 9.3 Implementar a GUI de categorias, exibindo apenas as categorias que o autor pode aplicar e preservando o alvo ao encaminhar
+- [x] 9.4 Implementar a GUI de motivos, exibindo nome e duração, ocultando motivos sem permissão, e aplicando a punição com a duração padrão ao clicar
+- [x] 9.5 Implementar a paginação da GUI de motivos e o controle de retorno, presente somente quando aberta a partir da GUI de categorias
+- [x] 9.6 Garantir que fechar qualquer GUI sem selecionar não crie nenhum registro
+- [x] 9.7 Implementar a GUI de histórico com carga por página sob demanda, ordenação decrescente e rótulo de estado distinguível por ícone ou cor
+- [x] 9.8 Implementar no histórico a exibição de tempo restante, texto de permanente, e dados de revogação quando houver
+- [x] 9.9 Implementar o filtro de categoria do histórico, reiniciando a paginação na primeira página
+- [x] 9.10 Implementar o detalhe de uma punição com identificador e servidor de origem
+- [x] 9.11 Implementar a GUI de relatório com as quatro janelas selecionáveis, destaque da janela ativa e recarga assíncrona sem fechar a GUI
+- [x] 9.12 Implementar no relatório geral o total, a divisão por estado, o ranking por autor e a distribuição por motivo
+- [x] 9.13 Implementar o ranking paginado ou truncado de forma configurável, indicando a existência de mais entradas
+- [x] 9.14 Implementar a GUI de relatório individual do staffer, com a lista das punições mais recentes aplicadas por ele
+- [x] 9.15 Implementar o texto configurável de ausência de dados nas GUIs de histórico e de relatório
 
 ## 10. Módulo Velocity
 
