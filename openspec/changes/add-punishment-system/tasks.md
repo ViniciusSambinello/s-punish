@@ -11,16 +11,16 @@
 
 ## 2. Domínio em `spunish-common`
 
-- [ ] 2.1 Criar o record `PunishmentCategory` como enum `BAN`/`MUTE` com resolução case-insensitive a partir de texto
-- [ ] 2.2 Criar a sealed interface `Actor` com `PlayerActor`, `ConsoleActor` e `SystemActor`
-- [ ] 2.3 Criar os records `PunishmentTarget` (uuid, nome) e `PlayerProfile` (uuid, nome, último acesso)
-- [ ] 2.4 Criar o record `Punishment` com todos os campos persistidos, incluindo dados de revogação
-- [ ] 2.5 Criar a sealed interface `PunishmentState` com `Active`, `Expired` e `Revoked`, e a resolução de estado a partir de um `Punishment` e de um instante de referência
-- [ ] 2.6 Criar a porta `SystemClock` e sua implementação padrão, injetável para testes determinísticos
-- [ ] 2.7 Implementar `DurationParser`: aceita `n` (permanente) e sequências quantidade+unidade `s|m|h|d|w|mo|y`, rejeitando malformado, zero e negativo
-- [ ] 2.8 Escrever testes unitários de `DurationParser` cobrindo `n`, unidade simples, composto (`1h30m`, `1y6mo`), unidade desconhecida, zero e vazio
-- [ ] 2.9 Implementar `DurationFormatter` com rótulos de unidade, número máximo de unidades e texto de permanente, todos vindos de configuração
-- [ ] 2.10 Escrever testes unitários de `DurationFormatter` cobrindo truncamento por número máximo de unidades e o caso permanente
+- [x] 2.1 Criar o record `PunishmentCategory` como enum `BAN`/`MUTE` com resolução case-insensitive a partir de texto
+- [x] 2.2 Criar a sealed interface `Actor` com `PlayerActor`, `ConsoleActor` e `SystemActor`
+- [x] 2.3 Criar os records `PunishmentTarget` (uuid, nome) e `PlayerProfile` (uuid, nome, último acesso)
+- [x] 2.4 Criar o record `Punishment` com todos os campos persistidos, incluindo dados de revogação
+- [x] 2.5 Criar a sealed interface `PunishmentState` com `Active`, `Expired` e `Revoked`, e a resolução de estado a partir de um `Punishment` e de um instante de referência
+- [x] 2.6 Criar a porta `SystemClock` e sua implementação padrão, injetável para testes determinísticos
+- [x] 2.7 Implementar `DurationParser`: aceita `n` (permanente) e sequências quantidade+unidade `s|m|h|d|w|mo|y`, rejeitando malformado, zero e negativo
+- [x] 2.8 Escrever testes unitários de `DurationParser` cobrindo `n`, unidade simples, composto (`1h30m`, `1y6mo`), unidade desconhecida, zero e vazio
+- [x] 2.9 Implementar `DurationFormatter` com rótulos de unidade, número máximo de unidades e texto de permanente, todos vindos de configuração
+- [x] 2.10 Escrever testes unitários de `DurationFormatter` cobrindo truncamento por número máximo de unidades e o caso permanente
 
 ## 3. Configuração, catálogo e mensagens
 
