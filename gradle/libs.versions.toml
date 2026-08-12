@@ -8,6 +8,7 @@ adventure = "5.2.0"
 junit = "5.14.4"
 assertj = "3.27.7"
 testcontainers = "2.0.5"
+mockito = "5.23.0"
 shadow = "9.6.1"
 
 [libraries]
@@ -28,6 +29,9 @@ junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
 
 assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
+mockito-junit-jupiter = { module = "org.mockito:mockito-junit-jupiter", version.ref = "mockito" }
 
 testcontainers-bom = { module = "org.testcontainers:testcontainers-bom", version.ref = "testcontainers" }
 testcontainers-junit-jupiter = { module = "org.testcontainers:testcontainers-junit-jupiter" }

@@ -42,19 +42,19 @@
 
 ## 4. Persistência MySQL
 
-- [ ] 4.1 Implementar `DatabaseConnectionProvider` sobre HikariCP, com prefixo de tabela, SSL e parâmetros de pool vindos da configuração, e `driverClassName` apontando para o FQCN relocado
-- [ ] 4.2 Garantir que credenciais nunca apareçam em log, inclusive em mensagens de erro e stack traces, e cobrir isso com teste
-- [ ] 4.3 Implementar o executor de I/O sobre virtual threads e a fronteira assíncrona baseada em `CompletableFuture`, com timeout de consulta configurável
-- [ ] 4.4 Escrever a migração `V1` criando `profiles`, `punishments`, `sync_events` e `schema_version` com os índices do design
-- [ ] 4.5 Implementar `SchemaMigrator` com `GET_LOCK` nomeado, aplicação idempotente e recusa de inicialização quando a versão do schema for maior que a suportada
-- [ ] 4.6 Implementar `ProfileRepository`: upsert no login e resolução por nome escolhendo o perfil de acesso mais recente
-- [ ] 4.7 Implementar `PunishmentRepository.insert`, gravando punição e perfil do alvo na mesma transação e gerando o `public_id`
-- [ ] 4.8 Implementar `PunishmentRepository.findActive` por uuid e categoria, com o predicado de expiração usando `UTC_TIMESTAMP(3)`
-- [ ] 4.9 Implementar `PunishmentRepository.revoke` registrando tipo de revogador, uuid, nome, instante e motivo, sem alterar campos originais
-- [ ] 4.10 Implementar `PunishmentRepository.findHistory` paginado por uuid, com filtro opcional de categoria e ordenação por instante de aplicação decrescente
-- [ ] 4.11 Implementar as consultas agregadas de relatório: total, divisão por estado, ranking por autor e distribuição por motivo, parametrizadas por categoria, faixa de instante e autor opcional
-- [ ] 4.12 Implementar a rotina de retenção, desabilitada por padrão, removendo apenas punições encerradas mais antigas que o período configurado
-- [ ] 4.13 Implementar a detecção de perda de conexão, a reconexão com espera crescente e o indicador de saúde consultável
+- [x] 4.1 Implementar `DatabaseConnectionProvider` sobre HikariCP, com prefixo de tabela, SSL e parâmetros de pool vindos da configuração, e `driverClassName` apontando para o FQCN relocado
+- [x] 4.2 Garantir que credenciais nunca apareçam em log, inclusive em mensagens de erro e stack traces, e cobrir isso com teste
+- [x] 4.3 Implementar o executor de I/O sobre virtual threads e a fronteira assíncrona baseada em `CompletableFuture`, com timeout de consulta configurável
+- [x] 4.4 Escrever a migração `V1` criando `profiles`, `punishments`, `sync_events` e `schema_version` com os índices do design
+- [x] 4.5 Implementar `SchemaMigrator` com `GET_LOCK` nomeado, aplicação idempotente e recusa de inicialização quando a versão do schema for maior que a suportada
+- [x] 4.6 Implementar `ProfileRepository`: upsert no login e resolução por nome escolhendo o perfil de acesso mais recente
+- [x] 4.7 Implementar `PunishmentRepository.insert`, gravando punição e perfil do alvo na mesma transação e gerando o `public_id`
+- [x] 4.8 Implementar `PunishmentRepository.findActive` por uuid e categoria, com o predicado de expiração usando `UTC_TIMESTAMP(3)`
+- [x] 4.9 Implementar `PunishmentRepository.revoke` registrando tipo de revogador, uuid, nome, instante e motivo, sem alterar campos originais
+- [x] 4.10 Implementar `PunishmentRepository.findHistory` paginado por uuid, com filtro opcional de categoria e ordenação por instante de aplicação decrescente
+- [x] 4.11 Implementar as consultas agregadas de relatório: total, divisão por estado, ranking por autor e distribuição por motivo, parametrizadas por categoria, faixa de instante e autor opcional
+- [x] 4.12 Implementar a rotina de retenção, desabilitada por padrão, removendo apenas punições encerradas mais antigas que o período configurado
+- [x] 4.13 Implementar a detecção de perda de conexão, a reconexão com espera crescente e o indicador de saúde consultável
 
 ## 5. Serviços de punição em `spunish-common`
 
