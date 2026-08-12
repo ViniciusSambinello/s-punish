@@ -11,7 +11,7 @@ import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@Plugin(id = "spunish", name = "SPunish", version = "0.1.0-SNAPSHOT",
+@Plugin(id = "spunish", name = "s-punish", version = "0.1.0-SNAPSHOT",
         description = "Network-wide punishment enforcement at the proxy edge.")
 public final class SPunishVelocityPlugin {
 
@@ -30,7 +30,7 @@ public final class SPunishVelocityPlugin {
         try {
             services = SPunishVelocityServices.bootstrap(server, dataDirectory);
         } catch (SPunishVelocityBootstrapException e) {
-            Logger.getLogger("SPunish").log(Level.SEVERE, "SPunish could not be enabled: " + e.getMessage(), e);
+            Logger.getLogger("s-punish").log(Level.SEVERE, "s-punish could not be enabled: " + e.getMessage(), e);
             return;
         }
         server.getEventManager().register(this, new BanLoginListener(services));
