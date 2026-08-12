@@ -21,10 +21,10 @@ by commitlint. Format:
 <type>(<scope>): <description>
 ```
 
-Accepted scopes: `common`, `paper`, `velocity`, `docs`, `build`. Use the
-module a change actually touches; `docs` and `build` cover documentation and
-Gradle/CI-only changes respectively. Common types: `feat`, `fix`, `test`,
-`refactor`, `docs`, `chore`.
+Scope is optional, but when given must be one of `common`, `paper`,
+`velocity`, `docs`, `build` — use the module a change actually touches;
+`docs` and `build` cover documentation and Gradle/CI-only changes
+respectively. Common types: `feat`, `fix`, `test`, `refactor`, `docs`, `chore`.
 
 Examples:
 
