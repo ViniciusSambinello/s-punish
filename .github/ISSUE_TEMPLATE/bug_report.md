@@ -21,7 +21,7 @@ What you expected to happen instead.
 
 ## Environment
 
-- SPunish version:
+- s-punish version:
 - Paper version:
 - Velocity version (if the proxy module is installed):
 - MySQL version:

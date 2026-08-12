@@ -1,4 +1,4 @@
-# SPunish
+# s-punish
 
 [![CI](https://github.com/ViniciusSambinello/s-punish/actions/workflows/ci.yml/badge.svg)](https://github.com/ViniciusSambinello/s-punish/actions/workflows/ci.yml)
 
@@ -6,7 +6,7 @@ A network-wide punishment system for Paper servers behind a Velocity proxy, with
 
 ## Why
 
-Vanilla `/ban` and `/mute` write to local files, don't sync across a network's backends, don't record who punished whom or why, and offer no way to audit staff activity. SPunish replaces that with a single source of truth shared by every server on the network, a full audit trail, and configurable reasons/durations/messages.
+Vanilla `/ban` and `/mute` write to local files, don't sync across a network's backends, don't record who punished whom or why, and offer no way to audit staff activity. s-punish replaces that with a single source of truth shared by every server on the network, a full audit trail, and configurable reasons/durations/messages.
 
 ## Features
 
@@ -29,10 +29,10 @@ Vanilla `/ban` and `/mute` write to local files, don't sync across a network's b
 
 1. Provision the MySQL database and an application user; confirm it's reachable from every backend and from the proxy.
 2. Drop `spunish-paper-<version>.jar` into one backend's `plugins/` folder and start it. The schema is created automatically on first boot.
-3. Edit `plugins/SPunish/config.yml` with your database credentials, then restart that backend and confirm punishments, expiration, history and reports work as expected.
+3. Edit `plugins/s-punish/config.yml` with your database credentials, then restart that backend and confirm punishments, expiration, history and reports work as expected.
 4. Copy the same `config.yml` to every other backend, changing only `server.id` on each.
 5. Optionally drop `spunish-velocity-<version>.jar` into the proxy's `plugins/` folder — backends already enforce bans on their own, so the proxy module is reinforcement, not a prerequisite.
-6. Deny the vanilla punishment commands (`minecraft.command.ban`, `minecraft.command.pardon`, `minecraft.command.ban-ip`, etc.) to staff, so SPunish is the only path.
+6. Deny the vanilla punishment commands (`minecraft.command.ban`, `minecraft.command.pardon`, `minecraft.command.ban-ip`, etc.) to staff, so s-punish is the only path.
 
 See [docs/deployment.md](docs/deployment.md) for the full deployment order and pool-sizing guidance.
 
@@ -56,7 +56,7 @@ See [docs/permissions.md](docs/permissions.md) for the full node table and examp
 
 ## Configuration
 
-SPunish ships sensible defaults for all four config files (`config.yml`, `reasons.yml`, `messages.yml`, `gui.yml`), created automatically on first boot. A minimal `config.yml` database section looks like:
+s-punish ships sensible defaults for all four config files (`config.yml`, `reasons.yml`, `messages.yml`, `gui.yml`), created automatically on first boot. A minimal `config.yml` database section looks like:
 
 ```yaml
 database:

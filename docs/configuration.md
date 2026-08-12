@@ -1,6 +1,6 @@
 # Configuration
 
-SPunish reads four YAML files from its data folder (`plugins/SPunish/` on a
+s-punish reads four YAML files from its data folder (`plugins/s-punish/` on a
 Paper backend, `plugins/spunish/` on the Velocity proxy). Each is created
 from a bundled default the first time it's missing, and is loaded with
 [Configurate](https://github.com/SpongePowered/Configurate) into a typed,

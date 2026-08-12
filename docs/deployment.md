@@ -36,7 +36,7 @@ build dependency should never point at a SNAPSHOT.
    their own, so the proxy module is reinforcement, not a prerequisite.
 6. Deny the vanilla punishment commands (`minecraft.command.ban`,
    `minecraft.command.pardon`, `minecraft.command.ban-ip`, etc.) to staff,
-   so SPunish is the only path to punish someone.
+   so s-punish is the only path to punish someone.
 
 ## Proxy connection pool sizing
 

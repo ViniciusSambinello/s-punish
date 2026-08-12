@@ -12,7 +12,7 @@ Describe the situation this would help with.
 
 ## Proposed behavior
 
-What you'd like SPunish to do instead, or in addition.
+What you'd like s-punish to do instead, or in addition.
 
 ## Alternatives considered
 

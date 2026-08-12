@@ -2,7 +2,7 @@
 
 O servidor não possui nenhum sistema próprio de punições: bans e mutes hoje dependem dos comandos vanilla do Paper, que gravam em arquivos locais (`banned-players.json`), não sincronizam entre servidores da rede, não guardam quem puniu nem por qual motivo padronizado, e não oferecem nenhuma forma de auditar a atuação da staff. Sem histórico consultável e sem relatórios por período, a coordenação não consegue verificar consistência de aplicação, detectar abuso de cargo, nem responder a apelações com base em registro confiável.
 
-Este change entrega o **SPunish**: um sistema de punições em rede, com persistência em MySQL, catálogo de motivos configurável, aplicação via GUI, e relatórios de auditoria com controle de acesso por permissão.
+Este change entrega o **s-punish**: um sistema de punições em rede, com persistência em MySQL, catálogo de motivos configurável, aplicação via GUI, e relatórios de auditoria com controle de acesso por permissão.
 
 ## What Changes
 
