@@ -8,11 +8,6 @@ import java.time.ZoneId;
 import java.util.EnumMap;
 import java.util.Map;
 
-/**
- * Everything derived from a parsed {@code messages.yml} tree that
- * {@link MessageService} needs, bundled so a reload swaps it as one unit —
- * never a formatter built from the new file paired with text from the old one.
- */
 record MessagesSnapshot(
         ConfigurationNode root,
         String prefix,

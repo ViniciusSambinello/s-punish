@@ -18,12 +18,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Level;
 
-/**
- * Updates the profile, blocks an active ban, and seeds the mute cache — all
- * before the player is added to the world (tasks 7.4/7.5). This event is
- * already off the main thread, so the blocking {@code .join()} calls here
- * are exactly what it exists for.
- */
 public final class PreLoginListener implements Listener {
 
     private final SPunishServices services;
@@ -66,13 +60,8 @@ public final class PreLoginListener implements Listener {
             services.stateCache().track(uuid, activeMute.orElse(null));
         } catch (RuntimeException failure) {
             services.logger().log(Level.WARNING, "Mute lookup failed during pre-login for " + name, failure);
-            // Chat's own fail mode governs this specific lookup — ALLOW (chat's default) simply
-            // seeds "not muted"; DENY has no representable "blocked pending resolution" cached
-            // state in PunishmentStateCache, so it conservatively falls back to denying the
-            // login outright rather than inventing a synthetic blocking punishment. This is a
-            // deliberate simplification: the ban lookup immediately above already succeeded, so
-            // this is the rare case of storage failing selectively between two calls in the same
-            // sequence, not a full outage (which login's own fail mode already handles).
+            // Chat's fail mode governs this lookup: ALLOW seeds "not muted", DENY denies the
+            // login outright.
             if (services.config().failMode().chat() == FailMode.DENY) {
                 event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, storageUnavailableMessage());
                 return;
@@ -81,9 +70,6 @@ public final class PreLoginListener implements Listener {
         }
     }
 
-    /**
-     * @return {@code true} if the event was disallowed and the caller should stop processing.
-     */
     private boolean denyOnFailure(AsyncPlayerPreLoginEvent event, String what, RuntimeException failure) {
         services.logger().log(Level.WARNING, "Storage unavailable during " + what + " for " + event.getName(), failure);
         if (services.config().failMode().login() == FailMode.DENY) {

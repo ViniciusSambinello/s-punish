@@ -9,9 +9,8 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Aggregate queries behind {@code /record}. {@code from == null} means "since
- * the beginning"; {@code staffUuid == null} on the filtered methods means
- * "the whole staff", not "no one".
+ * {@code from == null} means "since the beginning"; {@code staffUuid == null}
+ * on the filtered methods means "the whole staff", not "no one".
  */
 public interface ReportRepository {
 

@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Renders a duration — original or remaining — as human text, greedily
- * decomposed into the largest units first and truncated to
- * {@link DurationFormatSpec#maxUnits()} components.
+ * Renders a duration as human text, showing at most
+ * {@link DurationFormatSpec#maxUnits()} units, largest first.
  */
 public final class DurationFormatter {
 

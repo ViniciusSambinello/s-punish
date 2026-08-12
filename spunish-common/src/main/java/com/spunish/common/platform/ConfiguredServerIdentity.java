@@ -6,10 +6,9 @@ import java.util.UUID;
 import java.util.logging.Logger;
 
 /**
- * Falls back to the local hostname (stable across restarts on the same
- * machine, though not in every containerized setup) when {@code server.id}
- * is blank, and warns once so the operator sets it explicitly — see
- * {@code punishment/network-sync}'s server identity requirement.
+ * Falls back to the local hostname when {@code server.id} is blank in
+ * config.yml, and warns once so the operator sets an explicit, stable id —
+ * required for network sync to correctly recognize this server across restarts.
  */
 public final class ConfiguredServerIdentity implements ServerIdentity {
 

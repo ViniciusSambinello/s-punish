@@ -3,10 +3,6 @@ package com.spunish.common.catalog;
 import com.spunish.common.domain.PunishmentCategory;
 import com.spunish.common.duration.PunishmentDuration;
 
-/**
- * A validated, ready-to-use catalog entry — the raw {@link ReasonDefinition}
- * with its duration text already parsed once, at load time.
- */
 public record Reason(
         String id,
         PunishmentCategory category,

@@ -2,11 +2,6 @@ package com.spunish.common.storage;
 
 import java.util.List;
 
-/**
- * DDL for each schema version, keyed by version number. {@link SchemaMigrator}
- * records the applied version itself — these statements only create the new
- * structures for that version.
- */
 final class Migrations {
 
     static final int CURRENT_VERSION = 1;

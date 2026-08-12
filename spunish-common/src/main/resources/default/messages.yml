@@ -8,134 +8,139 @@ prefix: "<gray>[<gold>SPunish</gold>]</gray> "
 
 date-time:
   pattern: "dd/MM/yyyy HH:mm"
-  zone: "America/Sao_Paulo"
+  zone: "UTC"
 
 duration:
   max-units: 2
-  permanent-text: "permanente"
+  permanent-text: "permanent"
   units:
     s: "s"
     m: "m"
     h: "h"
     d: "d"
-    w: "sem"
-    mo: "mês"
-    y: "ano"
+    w: "w"
+    mo: "mo"
+    y: "y"
 
 state:
-  active: "<green>Ativa</green>"
-  expired: "<gray>Expirada</gray>"
-  revoked: "<yellow>Revogada</yellow>"
+  active: "<green>Active</green>"
+  expired: "<gray>Expired</gray>"
+  revoked: "<yellow>Revoked</yellow>"
 
 report:
   window:
-    daily: "Diário"
-    weekly: "Semanal"
-    monthly: "Mensal"
-    all-time: "Desde o início"
+    daily: "Daily"
+    weekly: "Weekly"
+    monthly: "Monthly"
+    all-time: "All-time"
 
 messages:
   general:
-    no-permission: "{prefix}<red>Você não tem permissão para fazer isso.</red>"
-    player-not-found: "{prefix}<red>Jogador '{player}' não encontrado.</red>"
-    invalid-category: "{prefix}<red>Categoria inválida. Use: ban, mute.</red>"
-    invalid-time: "{prefix}<red>Tempo inválido. Use 'n' para permanente, ou algo como 30d, 1h30m.</red>"
-    internal-error: "{prefix}<red>Ocorreu um erro interno. A equipe técnica foi notificada.</red>"
-    storage-unavailable: "{prefix}<red>O armazenamento está temporariamente indisponível. Tente novamente em breve.</red>"
+    no-permission: "{prefix}<red>You do not have permission to do that.</red>"
+    player-not-found: "{prefix}<red>Player '{player}' not found.</red>"
+    invalid-category: "{prefix}<red>Invalid category. Use: ban, mute.</red>"
+    invalid-time: "{prefix}<red>Invalid time. Use 'n' for permanent, or something like 30d, 1h30m.</red>"
+    internal-error: "{prefix}<red>An internal error occurred. The staff has been notified.</red>"
+    storage-unavailable: "{prefix}<red>Storage is temporarily unavailable. Please try again shortly.</red>"
+    console-not-supported: "{prefix}<red>This command can only be used by a player.</red>"
 
   punish:
     usage:
-      - "{prefix}<red>Uso incorreto:</red>"
-      - "<gray>/punish <jogador></gray>"
-      - "<gray>/punish <jogador> <categoria></gray>"
-      - "<gray>/punish <jogador> <categoria> <motivo> <tempo></gray>"
-    console-requires-full-form: "{prefix}<red>O console só pode usar a forma completa: /punish <jogador> <categoria> <motivo> <tempo>.</red>"
-    self-punish-denied: "{prefix}<red>Você não pode punir a si mesmo.</red>"
-    target-exempt: "{prefix}<red>{target} está protegido contra essa punição.</red>"
-    already-active: "{prefix}<red>{target} já possui uma punição ativa dessa categoria (restante: {duration-remaining}).</red>"
-    reason-permission-denied: "{prefix}<red>Você não tem permissão para usar esse motivo.</red>"
-    duration-limit-exceeded: "{prefix}<red>Você não pode aplicar uma duração maior que {duration-limit}.</red>"
-    confirmation: "{prefix}<green>{target} foi {category-verb} por {reason-display} ({duration}).</green>"
-    staff-announcement: "{prefix}<yellow>{actor} {category-verb-past} {target} por {reason-display} ({duration}).</yellow>"
-    public-announcement: "{prefix}<gray>{target} foi {category-verb}.</gray>"
+      - "{prefix}<red>Incorrect usage:</red>"
+      - "<gray>/punish <player></gray>"
+      - "<gray>/punish <player> <category></gray>"
+      - "<gray>/punish <player> <category> <reason> <time></gray>"
+    console-requires-full-form: "{prefix}<red>The console can only use the full form: /punish <player> <category> <reason> <time>.</red>"
+    reason-not-found: "{prefix}<red>Reason '{reason-id}' not found for category {category}.</red>"
+    self-punish-denied: "{prefix}<red>You cannot punish yourself.</red>"
+    target-exempt: "{prefix}<red>{target} is exempt from this punishment.</red>"
+    already-active: "{prefix}<red>{target} already has an active punishment in this category (remaining: {duration-remaining}).</red>"
+    reason-permission-denied: "{prefix}<red>You do not have permission to use that reason.</red>"
+    duration-limit-exceeded: "{prefix}<red>You cannot apply a duration longer than {duration-limit}.</red>"
+    confirmation: "{prefix}<green>Punishment applied: {target} — {category} — {reason-display} ({duration}).</green>"
+    staff-announcement: "{prefix}<yellow>{actor} applied {category} to {target}: {reason-display} ({duration}).</yellow>"
+    public-announcement: "{prefix}<gray>{target} received a punishment.</gray>"
 
   unpunish:
-    no-active-punishment: "{prefix}<red>{target} não possui uma punição ativa dessa categoria.</red>"
-    confirmation: "{prefix}<green>A punição de {target} foi revogada.</green>"
-    staff-announcement: "{prefix}<yellow>{actor} revogou a punição de {target}.</yellow>"
+    usage: "{prefix}<red>Usage: /{label} <player> [reason]</red>"
+    no-active-punishment: "{prefix}<red>{target} does not have an active punishment in this category.</red>"
+    confirmation: "{prefix}<green>{target}'s punishment was revoked.</green>"
+    staff-announcement: "{prefix}<yellow>{actor} revoked {target}'s punishment.</yellow>"
 
   reload:
-    success: "{prefix}<green>Configuração recarregada com sucesso.</green>"
-    failure-header: "{prefix}<red>A configuração não foi recarregada. Erros encontrados:</red>"
+    success: "{prefix}<green>Configuration reloaded successfully.</green>"
+    failure-header: "{prefix}<red>Configuration was not reloaded. Errors found:</red>"
     failure-line: "<red> - {error}</red>"
 
   screen:
     ban:
-      - "<red><bold>Você foi banido</bold></red>"
-      - "<gray>Motivo:</gray> {reason-display}"
-      - "<gray>Autor:</gray> {actor}"
-      - "<gray>Expira em:</gray> {duration-remaining}"
-      - "<gray>Identificador:</gray> {punishment-id}"
-    mute-warning: "{prefix}<red>Você está mutado. Motivo: {reason-display}. Restante: {duration-remaining}.</red>"
+      - "<red><bold>You have been banned</bold></red>"
+      - "<gray>Reason:</gray> {reason-display}"
+      - "<gray>By:</gray> {actor}"
+      - "<gray>Expires in:</gray> {duration-remaining}"
+      - "<gray>Id:</gray> {punishment-id}"
+    mute-warning: "{prefix}<red>You are muted. Reason: {reason-display}. Remaining: {duration-remaining}.</red>"
 
   history:
-    empty: "{prefix}<gray>Esse jogador não possui punições registradas.</gray>"
-    console-header: "Histórico de {target}:"
-    console-line: " #{punishment-id} [{category}] {reason-display} por {actor} em {applied-at} — {state}"
+    usage: "{prefix}<red>Usage: /history <player></red>"
+    empty: "{prefix}<gray>This player has no recorded punishments.</gray>"
+    console-header: "History for {target}:"
+    console-line: " #{punishment-id} [{category}] {reason-display} by {actor} on {applied-at} — {state}"
 
   record:
-    no-data: "{prefix}<gray>Nenhuma punição encontrada nessa janela.</gray>"
-    cooldown: "{prefix}<red>Aguarde antes de gerar outro relatório ({cooldown-remaining}).</red>"
+    usage: "{prefix}<red>Usage: /record <category> [staffer]</red>"
+    no-data: "{prefix}<gray>No punishments found in this window.</gray>"
+    cooldown: "{prefix}<red>Wait before generating another report ({cooldown-remaining}).</red>"
 
   gui:
     category:
-      title: "Selecione uma categoria"
+      title: "Select a category"
       item:
         ban:
           name: "<red>Ban</red>"
           lore:
-            - "<gray>Clique para banir {target}</gray>"
+            - "<gray>Click to ban {target}</gray>"
         mute:
           name: "<yellow>Mute</yellow>"
           lore:
-            - "<gray>Clique para mutar {target}</gray>"
+            - "<gray>Click to mute {target}</gray>"
     reason:
-      title: "Selecione um motivo"
-      back: "<gray>« Voltar</gray>"
-      previous-page: "<gray>« Página anterior</gray>"
-      next-page: "<gray>Próxima página »</gray>"
+      title: "Select a reason"
+      back: "<gray>« Back</gray>"
+      previous-page: "<gray>« Previous page</gray>"
+      next-page: "<gray>Next page »</gray>"
       item:
         name: "<white>{reason-display}</white>"
         lore:
-          - "<gray>Duração:</gray> {duration}"
-          - "<gray>Clique para aplicar</gray>"
+          - "<gray>Duration:</gray> {duration}"
+          - "<gray>Click to apply</gray>"
     history:
-      title: "Histórico de {target}"
-      previous-page: "<gray>« Página anterior</gray>"
-      next-page: "<gray>Próxima página »</gray>"
-      filter-all: "<white>Todas</white>"
-      filter-ban: "<red>Somente Ban</red>"
-      filter-mute: "<yellow>Somente Mute</yellow>"
+      title: "History of {target}"
+      previous-page: "<gray>« Previous page</gray>"
+      next-page: "<gray>Next page »</gray>"
+      filter-all: "<white>All</white>"
+      filter-ban: "<red>Bans only</red>"
+      filter-mute: "<yellow>Mutes only</yellow>"
       entry:
         name: "{state-icon} {reason-display}"
         lore:
-          - "<gray>Categoria:</gray> {category}"
-          - "<gray>Autor:</gray> {actor}"
-          - "<gray>Aplicada em:</gray> {applied-at}"
-          - "<gray>Estado:</gray> {state}"
+          - "<gray>Category:</gray> {category}"
+          - "<gray>By:</gray> {actor}"
+          - "<gray>Applied on:</gray> {applied-at}"
+          - "<gray>State:</gray> {state}"
       detail:
-        title: "Detalhes da punição"
+        title: "Punishment details"
         lore:
-          - "<gray>Identificador:</gray> {punishment-id}"
-          - "<gray>Servidor de origem:</gray> {origin-server}"
+          - "<gray>Id:</gray> {punishment-id}"
+          - "<gray>Origin server:</gray> {origin-server}"
     report:
-      title: "Relatório — {category}"
-      window-daily: "Diário"
-      window-weekly: "Semanal"
-      window-monthly: "Mensal"
-      window-all-time: "Desde o início"
+      title: "Report — {category}"
+      window-daily: "Daily"
+      window-weekly: "Weekly"
+      window-monthly: "Monthly"
+      window-all-time: "All-time"
       total: "<white>Total:</white> {total}"
-      revocation-rate: "<white>Taxa de revogação:</white> {revocation-rate}%"
+      revocation-rate: "<white>Revocation rate:</white> {revocation-rate}%"
       ranking-entry: "<gray>{rank}.</gray> {staffer} — {count}"
       reason-entry: "<gray>{reason-display}:</gray> {count}"
-      staffer-title: "Relatório de {staffer} — {category}"
+      staffer-title: "Report for {staffer} — {category}"

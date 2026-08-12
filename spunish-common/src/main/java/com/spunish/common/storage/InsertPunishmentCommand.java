@@ -8,11 +8,9 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * @param createdAt and {@code expiresAt} are computed by the caller from a single
- *                   {@code SystemClock.now()} reading (see {@code PunishmentDuration.expiresAt}) —
- *                   never re-derived here — so the persisted gap between them
- *                   always matches the configured duration exactly, regardless
- *                   of any clock skew against the database server.
+ * The persisted gap between {@code createdAt} and {@code expiresAt} always matches the
+ * configured punishment duration exactly, unaffected by any clock skew against the
+ * database server.
  */
 public record InsertPunishmentCommand(
         PunishmentCategory category,

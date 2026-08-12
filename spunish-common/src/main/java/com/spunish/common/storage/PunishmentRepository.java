@@ -10,29 +10,22 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-/**
- * A single MySQL implementation backs this in production ({@link MySqlPunishmentRepository});
- * the interface exists so precedence-rule tests (task 5.7) can run against an
- * in-memory fake without a database.
- */
 public interface PunishmentRepository {
 
     CompletableFuture<Punishment> insert(InsertPunishmentCommand command);
 
     /**
-     * Revokes {@code previousPunishmentId} and inserts {@code newPunishment}
-     * inside a single database transaction (design.md decision 1 /
-     * task 5.3's {@code spunish.punish.override} path) — a failure applying
-     * the new punishment must not leave the target with the old one revoked
-     * and nothing active in its place.
+     * Revokes {@code previousPunishmentId} and inserts {@code newPunishment} inside a single
+     * transaction: a failure applying the new punishment must never leave the target with the
+     * old punishment revoked and nothing active in its place (design.md decision 1).
      */
     CompletableFuture<OverrideResult> insertWithOverride(
             InsertPunishmentCommand newPunishment, long previousPunishmentId, Actor revoker, Instant revokedAt, String revokeReason);
 
     /**
-     * Active is decided by the database's own clock, not the caller's — see
-     * {@code punishment/enforcement}'s expiration requirement. No reference
-     * instant is accepted here on purpose.
+     * Whether a punishment is active is decided by the database's own clock, not the
+     * caller's, so expiration is judged consistently regardless of any clock skew on the
+     * calling server.
      */
     CompletableFuture<Optional<Punishment>> findActive(UUID targetUuid, PunishmentCategory category);
 
@@ -41,19 +34,11 @@ public interface PunishmentRepository {
     CompletableFuture<Optional<Punishment>> findByPublicId(String publicId);
 
     /**
-     * @param originServer this instance's identity, recorded on the
-     *                      {@code PUNISHMENT_REVOKED} sync event written in the
-     *                      same transaction as the revocation (task 6.1).
-     * @return {@code true} if a row was actually revoked; {@code false} if the
-     * punishment did not exist or was already revoked (caller races safely).
+     * @return {@code true} if the punishment was revoked; {@code false} if it did not exist or
+     * was already revoked, so callers can safely race to revoke the same punishment.
      */
     CompletableFuture<Boolean> revoke(long punishmentId, Actor revoker, Instant revokedAt, String revokeReason, String originServer);
 
-    /**
-     * Plain limit/offset, not "page number" — callers that over-fetch by one
-     * to detect a next page (see {@code PunishmentHistoryService}) would
-     * otherwise have their offset silently corrupted by the padded page size.
-     */
     CompletableFuture<List<Punishment>> findHistory(
             UUID targetUuid, Optional<PunishmentCategory> category, int limit, int offset);
 }

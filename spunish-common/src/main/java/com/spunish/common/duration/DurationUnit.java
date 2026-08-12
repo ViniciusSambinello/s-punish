@@ -4,11 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Units accepted by {@link DurationParser}. Seconds-per-unit for {@code MONTH}
- * and {@code YEAR} are fixed approximations (30 and 365 days) rather than
- * calendar-accurate spans — punishment durations are computed against a
- * fixed {@link java.time.Instant}, not a calendar date, so there is no
- * "current month length" to anchor to.
+ * Units accepted by {@link DurationParser}. {@code MONTH} and {@code YEAR}
+ * are fixed at 30 and 365 days — not calendar-accurate — since punishment
+ * durations run from a fixed instant, not a calendar date.
  */
 public enum DurationUnit {
 
@@ -20,9 +18,6 @@ public enum DurationUnit {
     MONTH("mo", 2_592_000L),
     YEAR("y", 31_536_000L);
 
-    /**
-     * Largest unit first, for greedy decomposition when formatting a duration back to text.
-     */
     public static final List<DurationUnit> DESCENDING = List.of(YEAR, MONTH, WEEK, DAY, HOUR, MINUTE, SECOND);
 
     private final String code;

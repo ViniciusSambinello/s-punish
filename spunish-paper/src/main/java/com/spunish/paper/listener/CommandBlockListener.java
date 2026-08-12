@@ -19,12 +19,11 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * Blocks the configured communication commands (task 7.7) for a muted
- * player. A command not registered by a plugin (a vanilla one) has no
- * {@link PluginCommand} to resolve, so vanilla aliases must already be
- * listed explicitly in {@code mute.blocked-commands} (the shipped default
- * does this — msg/tell/w/r/reply/mail); a plugin-registered alias, which
- * *is* resolvable, is caught even if only its primary name is configured.
+ * Blocks the configured communication commands for a muted player. Vanilla
+ * commands (msg/tell/w/r/reply/mail by default) must be listed explicitly in
+ * {@code mute.blocked-commands} by name; a plugin-registered command is
+ * blocked even if only its primary name is configured, since its aliases
+ * resolve back to it.
  */
 public final class CommandBlockListener implements Listener {
 

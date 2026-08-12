@@ -2,8 +2,8 @@ package com.spunish.common.config;
 
 /**
  * What to do when punishment state cannot be determined because storage is
- * unavailable. Defaults differ by call site: {@code DENY} for login,
- * {@code ALLOW} for chat (see {@code punishment/enforcement}).
+ * unavailable. Login defaults to {@code DENY}; chat defaults to
+ * {@code ALLOW}.
  */
 public enum FailMode {
     ALLOW,

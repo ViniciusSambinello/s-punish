@@ -20,10 +20,9 @@ import java.util.concurrent.CompletionException;
 import java.util.function.Supplier;
 
 /**
- * Orchestrates the precedence rules from {@code punishment/issuance} and
- * {@code punishment/storage}. Never kicks or mutes anyone itself — enforcement
- * side effects are the caller's job, triggered only on {@link IssueResult.Success},
- * so a persistence failure (5.6) can never leave a target half-punished.
+ * Never kicks or mutes anyone itself — enforcement side effects are the
+ * caller's job, triggered only on {@link IssueResult.Success}, so a
+ * persistence failure can never leave a target half-punished.
  */
 public final class PunishmentIssueService {
 

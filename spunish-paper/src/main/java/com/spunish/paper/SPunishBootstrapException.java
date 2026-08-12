@@ -1,10 +1,8 @@
 package com.spunish.paper;
 
 /**
- * Thrown by {@link SPunishServices#bootstrap} for any condition that must
- * refuse plugin enablement outright: an unreachable database, a schema
- * newer than this binary supports, or an invalid {@code reasons.yml}
- * (catalog spec's "recusa-se a iniciar quando a configuração for inválida").
+ * The plugin refuses to enable when the database is unreachable, the schema
+ * is newer than this binary supports, or {@code reasons.yml} fails validation.
  */
 public final class SPunishBootstrapException extends Exception {
 

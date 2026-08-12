@@ -2,12 +2,6 @@ package com.spunish.common.storage;
 
 import java.util.regex.Pattern;
 
-/**
- * Table names, prefixed per {@code database.table-prefix}. The prefix comes
- * from config, not user input, but it still gets validated once here — it is
- * concatenated directly into DDL/DML text (identifiers cannot be bind
- * parameters), so a stray character would otherwise reach raw SQL.
- */
 public final class TableNames {
 
     private static final Pattern SAFE_PREFIX = Pattern.compile("[A-Za-z0-9_]*");

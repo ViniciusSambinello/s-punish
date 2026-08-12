@@ -13,10 +13,9 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * Validates the raw shape of {@code reasons.yml} and, only when it is fully
- * valid, builds the runtime {@link ReasonCatalog}. Every entry is checked —
- * the first problem found does not short-circuit the rest — so a single
- * reload surfaces the complete list of things to fix.
+ * Validates {@code reasons.yml} in full before building the runtime
+ * {@link ReasonCatalog}: every entry is checked, so a single reload reports
+ * every problem at once rather than stopping at the first one.
  */
 public final class ReasonCatalogValidator {
 

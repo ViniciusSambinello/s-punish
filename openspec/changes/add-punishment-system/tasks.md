@@ -100,16 +100,16 @@
 
 ## 8. Módulo Paper — comandos e tab complete
 
-- [ ] 8.1 Implementar `/punish` com as três aridades válidas e recusa das demais com a mensagem de uso
-- [ ] 8.2 Implementar a restrição do console às formas que não abrem GUI, com mensagem orientando a forma completa
-- [ ] 8.3 Implementar o tab complete de `/punish`: jogadores, categorias filtradas por permissão, motivos da categoria digitada filtrados por permissão, e sugestões de tempo
-- [ ] 8.4 Implementar a filtragem por prefixo case-insensitive e o retorno vazio quando a categoria da posição anterior for inválida
-- [ ] 8.5 Implementar `/unban` e `/unmute` com motivo livre opcional e permissão `spunish.unpunish.<category>`
-- [ ] 8.6 Implementar `/record <category>` e `/record <category> <staffer>` com o gating de `spunish.record` e `spunish.record.others`
-- [ ] 8.7 Implementar o tab complete de `/record`: categorias na posição 1, e na posição 2 os jogadores online com permissão de punir aquela categoria
-- [ ] 8.8 Implementar `/history <player>` com permissão `spunish.history`, tab complete de jogadores e saída em texto quando executado pelo console
-- [ ] 8.9 Implementar o comando administrativo de recarga com `spunish.admin.reload`, devolvendo ao autor a lista de erros quando a configuração for inválida
-- [ ] 8.10 Garantir que nenhum comando execute resolução de jogador ou acesso ao armazenamento na thread principal
+- [x] 8.1 Implementar `/punish` com as três aridades válidas e recusa das demais com a mensagem de uso
+- [x] 8.2 Implementar a restrição do console às formas que não abrem GUI, com mensagem orientando a forma completa
+- [x] 8.3 Implementar o tab complete de `/punish`: jogadores, categorias filtradas por permissão, motivos da categoria digitada filtrados por permissão, e sugestões de tempo
+- [x] 8.4 Implementar a filtragem por prefixo case-insensitive e o retorno vazio quando a categoria da posição anterior for inválida
+- [x] 8.5 Implementar `/unban` e `/unmute` com motivo livre opcional e permissão `spunish.unpunish.<category>`
+- [x] 8.6 Implementar `/record <category>` e `/record <category> <staffer>` com o gating de `spunish.record` e `spunish.record.others`
+- [x] 8.7 Implementar o tab complete de `/record`: categorias na posição 1, e na posição 2 os jogadores online com permissão de punir aquela categoria
+- [x] 8.8 Implementar `/history <player>` com permissão `spunish.history`, tab complete de jogadores e saída em texto quando executado pelo console
+- [x] 8.9 Implementar o comando administrativo de recarga com `spunish.admin.reload`, devolvendo ao autor a lista de erros quando a configuração for inválida
+- [x] 8.10 Garantir que nenhum comando execute resolução de jogador ou acesso ao armazenamento na thread principal
 
 ## 9. Módulo Paper — GUIs
 

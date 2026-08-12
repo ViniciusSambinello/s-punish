@@ -8,11 +8,9 @@ import com.spunish.paper.enforcement.BanEnforcer;
 import com.spunish.paper.enforcement.StaffNotifier;
 
 /**
- * Reacts to a sync event that this instance did not itself originate — by
- * construction (see {@code SyncEventConsumer}), every call here is about a
- * change made elsewhere in the network. Dispatched to the main thread
- * conservatively: kicking a player and sending Adventure messages are
- * documented safe off-thread in places, but not uniformly enough to rely on.
+ * Reacts only to sync events that this instance did not itself originate —
+ * every call here is about a punishment change made elsewhere in the
+ * network.
  */
 public final class PaperSyncEventListener implements SyncEventListener {
 

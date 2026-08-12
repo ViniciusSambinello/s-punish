@@ -17,14 +17,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-/**
- * In-memory fake for the precedence-rule tests (task 5.7/5.9) — the interface
- * exists precisely so these don't need a database. {@code findActive} checks
- * expiry against the same injected {@link SystemClock} the test controls
- * (unlike production, which anchors to the database's own clock) — using
- * real wall-clock time here would make expiry depend on which real-world
- * date the test happens to run on.
- */
 final class InMemoryPunishmentRepository implements PunishmentRepository {
 
     private final java.util.Map<Long, Punishment> byId = new ConcurrentHashMap<>();
@@ -88,7 +80,6 @@ final class InMemoryPunishmentRepository implements PunishmentRepository {
         return CompletableFuture.completedFuture(revokeNow(punishmentId, revoker, revokedAt, revokeReason) != null);
     }
 
-    /** @return the revoked punishment, or {@code null} if it was missing/already revoked. */
     private Punishment revokeNow(long punishmentId, Actor revoker, Instant revokedAt, String revokeReason) {
         Punishment existing = byId.get(punishmentId);
         if (existing == null || existing.isRevoked()) {

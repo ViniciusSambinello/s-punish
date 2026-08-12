@@ -6,9 +6,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Substitutes {@code {token}} placeholders. An unknown token is left literal
- * in the output — the message still gets sent — and reported once via the
- * supplied callback rather than raising.
+ * An unknown {@code {token}} placeholder is left literal in the output —
+ * the message still gets sent — and is reported once rather than failing.
  */
 public final class PlaceholderResolver {
 

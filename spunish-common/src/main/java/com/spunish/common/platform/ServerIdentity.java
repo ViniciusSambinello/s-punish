@@ -1,9 +1,8 @@
 package com.spunish.common.platform;
 
 /**
- * This instance's configured or derived identifier — recorded as
- * {@code origin_server} on every punishment applied here and used by the
- * sync consumer to ignore self-originated events (see {@code punishment/network-sync}).
+ * This instance's identifier, recorded as {@code origin_server} on every
+ * punishment applied here and used to ignore self-originated network-sync events.
  */
 public interface ServerIdentity {
 

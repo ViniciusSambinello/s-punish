@@ -21,16 +21,16 @@ class DurationFormatterTest {
                     DurationUnit.MONTH, "mo",
                     DurationUnit.YEAR, "y"),
             2,
-            "permanente");
+            "permanent");
 
     @Test
     void permanentDurationUsesConfiguredText() {
-        assertThat(formatter.format((Duration) null, spec)).isEqualTo("permanente");
+        assertThat(formatter.format((Duration) null, spec)).isEqualTo("permanent");
     }
 
     @Test
     void permanentPunishmentDurationUsesConfiguredText() {
-        assertThat(formatter.format(PunishmentDuration.Permanent.INSTANCE, spec)).isEqualTo("permanente");
+        assertThat(formatter.format(PunishmentDuration.Permanent.INSTANCE, spec)).isEqualTo("permanent");
     }
 
     @Test
@@ -54,7 +54,7 @@ class DurationFormatterTest {
 
     @Test
     void unlabeledUnitFallsBackToUnitCode() {
-        DurationFormatSpec noLabels = new DurationFormatSpec(Map.of(), 2, "permanente");
+        DurationFormatSpec noLabels = new DurationFormatSpec(Map.of(), 2, "permanent");
 
         assertThat(formatter.format(Duration.ofDays(1), noLabels)).isEqualTo("1d");
     }

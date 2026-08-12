@@ -8,11 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
-/**
- * Shared column list and row mapping for every query that returns full
- * {@link Punishment} rows — used by both the CRUD repository and the report
- * repository's "most recent by staffer" query.
- */
 final class PunishmentRowMapper {
 
     static final String COLUMNS = """

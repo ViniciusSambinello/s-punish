@@ -6,10 +6,8 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Shared between {@link ChatListener} and {@link CommandBlockListener} (both
- * warn on the same cooldown) and cleared by {@link QuitListener} so it does
- * not grow unbounded over a long uptime. Public: constructed and threaded
- * through by {@code SPunishPlugin}, which lives in a different package.
+ * Shared between chat and command blocking so a muted player is not warned
+ * twice within the same cooldown window.
  */
 public final class MuteWarningCooldown {
 

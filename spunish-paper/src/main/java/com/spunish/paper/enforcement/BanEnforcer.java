@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Disconnects a player who is online here when a BAN reaches them — whether
- * applied locally or learned from a sync event (task 7.10). A no-op for MUTE
- * and for a target not currently online on this instance.
+ * A BAN disconnects the target immediately if they are online on this
+ * instance, whether the ban was applied locally or learned from a sync
+ * event. No-op for MUTE and for a target not currently online here.
  */
 public final class BanEnforcer {
 

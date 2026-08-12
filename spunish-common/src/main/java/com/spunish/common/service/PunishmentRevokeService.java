@@ -42,7 +42,8 @@ public final class PunishmentRevokeService {
                     Instant revokedAt = clock.now();
                     return repository.revoke(id, revoker, revokedAt, revokeReason, serverIdentity.id()).thenCompose(applied -> {
                         if (!applied) {
-                            // Raced with another revocation between findActive and revoke.
+                            // A revoke that loses a race against a concurrent revoke is treated
+                            // as no active punishment, not an error.
                             return CompletableFuture.completedFuture((RevokeResult) new RevokeResult.NoActivePunishment());
                         }
                         return repository.findById(id)

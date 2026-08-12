@@ -14,13 +14,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-/**
- * Loads a YAML file backed by an {@code @ConfigSerializable} record,
- * bootstrapping it from a bundled default resource the first time it is
- * requested. {@code ObjectMapper.factory()} already resolves record
- * components (not just no-arg-constructor fields) and defaults to
- * lower-case-dashed key naming, so no custom discoverer setup is needed.
- */
 public final class YamlConfigLoader {
 
     private static final ObjectMapper.Factory OBJECT_MAPPER_FACTORY = ObjectMapper.factory();
@@ -42,10 +35,6 @@ public final class YamlConfigLoader {
         }
     }
 
-    /**
-     * Parses a node from disk without mapping it, so callers can validate raw
-     * shape before committing to a typed reload (see {@code ReasonCatalogValidator}).
-     */
     public static ConfigurationNode loadNode(Path target, String defaultResourcePath) {
         ensureFileExists(target, defaultResourcePath);
         try {
@@ -56,10 +45,9 @@ public final class YamlConfigLoader {
     }
 
     /**
-     * Parses a bundled default resource on its own, independent of any file
-     * on disk — used as {@code MessageService}'s fallback tree for a key
-     * missing from the on-disk {@code messages.yml}, which must reflect the
-     * shipped defaults even if the user's file predates a newer key.
+     * A message key missing from the on-disk {@code messages.yml} falls back
+     * to the shipped bundled default, so a config file that predates a newer
+     * key still resolves to correct text.
      */
     public static ConfigurationNode loadBundledDefaults(String resourcePath) {
         try (InputStream in = YamlConfigLoader.class.getResourceAsStream(resourcePath)) {

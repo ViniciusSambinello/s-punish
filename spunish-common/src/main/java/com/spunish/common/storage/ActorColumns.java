@@ -5,10 +5,6 @@ import com.spunish.common.domain.ConsoleActor;
 import com.spunish.common.domain.PlayerActor;
 import com.spunish.common.domain.SystemActor;
 
-/**
- * Maps {@link Actor} to and from the {@code (*_type, *_uuid, *_name)} column
- * triples shared by {@code actor_*} and {@code revoker_*}.
- */
 final class ActorColumns {
 
     private ActorColumns() {

@@ -40,7 +40,7 @@ class YamlConfigLoaderTest {
         assertThat(banReasons).isNotNull();
         assertThat(banReasons).anySatisfy(reason -> {
             assertThat(reason.id()).isEqualTo("hacking");
-            assertThat(reason.displayName()).isEqualTo("Uso de cliente ilegal");
+            assertThat(reason.displayName()).isEqualTo("Use of illegal client");
             assertThat(reason.duration()).isEqualTo("30d");
             assertThat(reason.permission()).isEqualTo("spunish.reason.ban.hacking");
         });

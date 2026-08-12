@@ -7,10 +7,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-/**
- * Runtime, validated view of {@code reasons.yml}. Only {@link ReasonCatalogValidator}
- * constructs instances, so a {@code ReasonCatalog} in hand is always known-valid.
- */
 public final class ReasonCatalog {
 
     private final Map<PunishmentCategory, List<Reason>> byCategory;
@@ -30,8 +26,8 @@ public final class ReasonCatalog {
     }
 
     /**
-     * @param hasPermission checked against {@link Reason#permission()} for restricted
-     *                       reasons; unrestricted reasons are always visible.
+     * @param hasPermission restricted reasons are shown only if this check passes;
+     *                       unrestricted reasons are always visible.
      */
     public List<Reason> visibleTo(PunishmentCategory category, Predicate<String> hasPermission) {
         return forCategory(category).stream()

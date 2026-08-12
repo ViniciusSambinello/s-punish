@@ -39,7 +39,6 @@ class PunishmentHistoryServiceTest {
                 repository, clock, (ServerIdentity) () -> "test-server", permissions, Map::of);
         historyService = new PunishmentHistoryService(repository, clock);
 
-        // Five punishments, each overriding the last so they all land in history distinctly.
         for (int i = 0; i < 5; i++) {
             Reason reason = new Reason("r" + i, PunishmentCategory.BAN, "Reason " + i,
                     new DurationParser().parse("1d").orElseThrow(), null, null, null);

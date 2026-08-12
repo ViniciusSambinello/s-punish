@@ -17,19 +17,6 @@ import java.util.concurrent.CompletionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Polls {@code sync_events} with an overlap window, deduplicates by id
- * against a bounded set of recently-seen ids, ignores events this instance
- * itself produced, and resolves each surviving event to its full
- * {@link Punishment} before handing it to a {@link SyncEventListener}.
- *
- * The overlap exists because {@code AUTO_INCREMENT} is assigned at insert
- * time but a row only becomes visible at commit — a transaction that grabbed
- * id 100 can commit after one that grabbed 101, so filtering strictly by
- * "id greater than the last one seen" can permanently miss 100. Filtering by
- * {@code created_at} with an overlap and deduplicating by id closes that
- * window instead (design.md decision 8).
- */
 public final class SyncEventConsumer {
 
     private final SyncEventRepository syncEventRepository;
@@ -64,11 +51,9 @@ public final class SyncEventConsumer {
     }
 
     /**
-     * The poll cursor only advances on success — a failed poll is retried
-     * from the same starting point next time (task 6.6), so no event is
-     * skipped because of a transient failure. Never throws: a failure is
-     * logged and swallowed so it can't disable the plugin or stop local
-     * enforcement, which never depended on this consumer succeeding.
+     * Never throws: a sync failure is logged and swallowed so it can never
+     * disable the plugin or stop local enforcement, which does not depend on
+     * this consumer succeeding.
      */
     public CompletableFuture<Void> pollOnce() {
         Instant pollFrom = lastPollInstant.minus(overlap);
@@ -103,12 +88,6 @@ public final class SyncEventConsumer {
         return ex instanceof CompletionException && ex.getCause() != null ? ex.getCause() : ex;
     }
 
-    /**
-     * Bounded FIFO membership set — {@code removeEldestEntry} makes a
-     * {@link LinkedHashMap} evict its oldest entry once over capacity,
-     * which is exactly the "limited set of recent ids" design.md decision 8
-     * calls for, without unbounded growth over a long uptime.
-     */
     private static final class RecentIds {
 
         private final int capacity;

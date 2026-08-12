@@ -55,12 +55,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-/**
- * Everything the plugin needs, built once in {@link #bootstrap} and torn
- * down once in {@link #close}. Kept as one object so commands and GUIs
- * (sections 8-9) have a single place to reach services from, instead of
- * threading a dozen constructor parameters through every command class.
- */
 public final class SPunishServices implements AutoCloseable {
 
     private final Logger logger;
@@ -312,8 +306,8 @@ public final class SPunishServices implements AutoCloseable {
     }
 
     /**
-     * Catalog and messages only — see {@code punishment/messaging}'s reload
-     * requirement, which scopes the admin reload command to these two files.
+     * The admin reload command only refreshes the reason catalog and
+     * messages; other configuration requires a full plugin restart.
      */
     public ReloadOutcome reloadCatalogAndMessages() {
         List<String> errors = new ArrayList<>();
@@ -389,11 +383,6 @@ public final class SPunishServices implements AutoCloseable {
         return stateCache;
     }
 
-    /**
-     * For the local-apply path (command/GUI handlers, section 8-9) to kick an
-     * online target right after a successful ban — the sync-consumption path
-     * already does this via {@code PaperSyncEventListener}.
-     */
     public BanEnforcer banEnforcer() {
         return banEnforcer;
     }

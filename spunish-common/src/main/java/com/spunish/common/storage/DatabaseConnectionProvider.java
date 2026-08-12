@@ -6,14 +6,6 @@ import com.zaxxer.hikari.HikariDataSource;
 
 import javax.sql.DataSource;
 
-/**
- * Owns the HikariCP pool. {@code driverClassName} is set explicitly to the
- * driver's original FQCN rather than left to {@code ServiceLoader} discovery:
- * once spunish-paper/spunish-velocity are shaded (task 11.1), Shadow's
- * relocator rewrites this exact string constant along with the driver
- * classes themselves, so this line stays correct in both the unshaded test
- * classpath and the packaged plugin jar without any conditional logic.
- */
 public final class DatabaseConnectionProvider implements AutoCloseable {
 
     private static final String DRIVER_CLASS_NAME = "com.mysql.cj.jdbc.Driver";
@@ -35,8 +27,6 @@ public final class DatabaseConnectionProvider implements AutoCloseable {
     }
 
     private static String buildJdbcUrl(DatabaseSettings settings) {
-        // Credentials go through setUsername/setPassword, never embedded in the URL,
-        // so the URL itself is always safe to include in a log line.
         return "jdbc:mysql://" + settings.host() + ":" + settings.port() + "/" + settings.database()
                 + "?useSSL=" + settings.useSsl()
                 + "&serverTimezone=UTC"

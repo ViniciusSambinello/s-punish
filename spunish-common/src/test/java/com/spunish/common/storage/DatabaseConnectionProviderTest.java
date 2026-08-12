@@ -30,12 +30,8 @@ class DatabaseConnectionProviderTest {
 
     @Test
     void connectionFailureMessageAndStackTraceNeverIncludeThePassword() {
-        // Port 1 is reserved and never listening for MySQL, so this fails fast
-        // without needing a real database up. HikariCP fails fast at pool
-        // construction time by default (not lazily on first getConnection()) —
-        // which is also exactly the "refuse to enable" behavior the storage
-        // spec wants at plugin startup — so the throwing call must be inside
-        // the same catch as getConnection(), not wrapped separately.
+        // The plugin must refuse to enable at startup when the database is
+        // unreachable, rather than failing lazily on first use.
         DatabaseSettings failingSettings = new DatabaseSettings(
                 "127.0.0.1", 1, "spunish", "spunish", SECRET_PASSWORD, "sp_", false,
                 new PoolSettings(1, 1, 500, 60_000), 300);

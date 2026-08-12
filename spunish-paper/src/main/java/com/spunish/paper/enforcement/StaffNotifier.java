@@ -12,15 +12,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Announces a punishment or revocation to {@code spunish.notify} holders and,
- * unless turned off, the whole server (task 7.12). "Off" is the same
- * empty-message convention as everywhere else — {@code punish.public-announcement}
- * left blank in messages.yml — so {@link #send} disabling itself on an
- * empty render is the only toggle needed; there is no separate boolean flag.
- * Called both right after a local apply/revoke and whenever a sync event for
- * one reaches this instance from elsewhere — the network-wide reach comes
- * from every instance doing this for its own local audience, not from one
- * instance messaging another's.
+ * Announces a punishment to {@code spunish.notify} holders and, unless
+ * disabled, to the whole server; a revocation goes to staff only. The public
+ * announcement is disabled by leaving {@code punish.public-announcement}
+ * blank in messages.yml — there is no separate toggle.
+ * Network-wide notification works by every instance separately notifying its
+ * own local audience — never by one instance reaching across to message
+ * another's players directly.
  */
 public final class StaffNotifier {
 

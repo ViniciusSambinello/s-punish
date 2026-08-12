@@ -9,11 +9,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 
 /**
- * Renders MiniMessage text, degrading to plain (unformatted) text on a
- * malformed tag instead of failing the send — the broken key is logged once.
- * Uses a strict-mode instance: the default non-strict {@code MiniMessage.miniMessage()}
- * silently renders unclosed/unresolvable tags as literal text and never
- * throws, which would make this degrade-and-log path unreachable.
+ * A malformed MiniMessage tag degrades to plain (unformatted) text rather
+ * than failing the send; the broken key is logged once.
  */
 public final class MiniMessageRenderer {
 

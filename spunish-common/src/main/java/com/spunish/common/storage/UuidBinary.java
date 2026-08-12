@@ -3,10 +3,6 @@ package com.spunish.common.storage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/**
- * Converts to/from the {@code BINARY(16)} representation used for every UUID
- * column — half the index footprint of a {@code CHAR(36)}.
- */
 final class UuidBinary {
 
     private UuidBinary() {

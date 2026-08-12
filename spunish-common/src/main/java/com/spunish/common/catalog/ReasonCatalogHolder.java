@@ -4,9 +4,8 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * Holds the currently effective {@link ReasonCatalog} and swaps it atomically
- * on reload: the replacement candidate is built and validated in full before
- * anything about the current reference changes, so an invalid edit to
+ * Holds the currently effective reason catalog. On reload, the replacement
+ * catalog is validated in full before it takes effect, so an invalid edit to
  * {@code reasons.yml} never leaves the catalog partially replaced.
  */
 public final class ReasonCatalogHolder {

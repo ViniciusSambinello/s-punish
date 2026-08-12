@@ -9,10 +9,8 @@ import java.util.logging.Logger;
 import javax.sql.DataSource;
 
 /**
- * Applies pending schema versions inside a named {@code GET_LOCK}, so several
- * servers in the network starting at once apply each migration exactly once
- * instead of racing on {@code CREATE TABLE}. Refuses to proceed if the
- * database is already on a newer version than this binary understands.
+ * Refuses to start if the database schema is already on a newer version than
+ * this binary understands.
  */
 public final class SchemaMigrator {
 

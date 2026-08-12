@@ -7,9 +7,8 @@ import javax.sql.DataSource;
 
 /**
  * Deletes closed (revoked or naturally expired) punishments past the
- * configured retention window. Whether this ever runs — {@code retention.enabled}
- * defaults to {@code false} — is the caller's decision, not this class's;
- * this only implements "purge", never "should I purge".
+ * configured retention window. Retention is disabled by default
+ * ({@code retention.enabled} defaults to {@code false}).
  */
 public final class RetentionService {
 

@@ -13,7 +13,6 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/** Counts how many times an aggregation actually ran, to prove cache/cooldown short-circuit it. */
 final class CountingReportRepository implements ReportRepository {
 
     final AtomicInteger aggregationCalls = new AtomicInteger();

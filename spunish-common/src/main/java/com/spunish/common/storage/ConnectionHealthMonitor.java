@@ -13,14 +13,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 import javax.sql.DataSource;
 
-/**
- * Periodically validates the pool and exposes a queryable health state.
- * HikariCP already evicts broken physical connections and lazily opens new
- * ones once the database is reachable again — this class does not duplicate
- * that; it only detects the outage, backs off the *check* interval (not
- * connection attempts) while unhealthy so a down database isn't hammered,
- * and logs the recovery transition.
- */
 public final class ConnectionHealthMonitor implements AutoCloseable {
 
     private final DataSource dataSource;
@@ -60,10 +52,6 @@ public final class ConnectionHealthMonitor implements AutoCloseable {
         scheduleNext();
     }
 
-    /**
-     * Package-visible so tests can drive checks deterministically instead of
-     * waiting on the real schedule.
-     */
     void check() {
         lastCheckedAt.set(Instant.now());
         try (Connection connection = dataSource.getConnection()) {

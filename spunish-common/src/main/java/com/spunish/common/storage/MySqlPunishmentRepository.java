@@ -87,13 +87,6 @@ public final class MySqlPunishmentRepository implements PunishmentRepository {
         });
     }
 
-    /**
-     * "Punição e perfil do alvo na mesma transação" (design.md 4.7) is satisfied
-     * by target_uuid/target_name living as columns on this same row — there is
-     * no separate write to the {@code profiles} table here. That table's own
-     * upsert is driven by login (see {@link ProfileRepository}, task 4.6 /
-     * section 7's pre-login listener), not by being punished.
-     */
     private Punishment insertOnConnection(Connection connection, InsertPunishmentCommand command) throws SQLException {
         if (command.actor() instanceof com.spunish.common.domain.SystemActor) {
             throw new IllegalArgumentException("A punishment cannot be applied by the system actor");
@@ -206,10 +199,6 @@ public final class MySqlPunishmentRepository implements PunishmentRepository {
         });
     }
 
-    /**
-     * @throws AlreadyRevokedOrMissingException if the row did not exist or was
-     *                                           already revoked — the {@code WHERE revoked_at IS NULL} guard matched nothing.
-     */
     private Punishment revokeOnConnection(
             Connection connection, long punishmentId, Actor revoker, Instant revokedAt, String revokeReason) throws SQLException {
         ActorColumns.Mapped mapped = ActorColumns.from(revoker);

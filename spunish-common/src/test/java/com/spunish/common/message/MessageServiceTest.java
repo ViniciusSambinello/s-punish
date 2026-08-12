@@ -114,7 +114,7 @@ class MessageServiceTest {
     void prefixPlaceholderIsAvailableEverywhere() {
         List<String> lines = service.renderPlain("test.greeting", Map.of("name", "World"));
 
-        // prefix is folded into {name}-free messages too; verify via a key that uses it indirectly
+        // {prefix} is applied to every message, not just ones with other placeholders.
         assertThat(service.renderPlain("general.no-permission", Map.of()).get(0)).startsWith("[P] ");
         assertThat(lines).containsExactly("Hello World!");
     }

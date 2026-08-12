@@ -67,12 +67,12 @@ class PunishmentRevokeServiceTest {
     void consoleCanRevokeAndIsRecordedAsTheRevoker() throws Exception {
         issueService.issue(new IssueCommand(target, staffActor, PunishmentCategory.BAN, banReason("1d"), null)).get();
 
-        RevokeResult result = revokeService.revoke(targetUuid, PunishmentCategory.BAN, ConsoleActor.INSTANCE, "apelação aceita").get();
+        RevokeResult result = revokeService.revoke(targetUuid, PunishmentCategory.BAN, ConsoleActor.INSTANCE, "appeal accepted").get();
 
         assertThat(result).isInstanceOf(RevokeResult.Success.class);
         var revoked = ((RevokeResult.Success) result).revoked();
         assertThat(revoked.revoker()).isEqualTo(ConsoleActor.INSTANCE);
-        assertThat(revoked.revokeReason()).isEqualTo("apelação aceita");
+        assertThat(revoked.revokeReason()).isEqualTo("appeal accepted");
     }
 
     @Test

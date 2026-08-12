@@ -4,29 +4,29 @@
 reasons:
   ban:
     - id: hacking
-      display-name: "Uso de cliente ilegal"
+      display-name: "Use of illegal client"
       duration: "30d"
       icon: DIAMOND_SWORD
-      description: "Uso comprovado de cliente modificado ou hacks"
+      description: "Proven use of a modified client or hacks"
       permission: "spunish.reason.ban.hacking"
     - id: griefing
       display-name: "Griefing"
       duration: "7d"
       icon: TNT
-      description: "Destruição ou alteração não autorizada de construções"
+      description: "Unauthorized destruction or alteration of builds"
     - id: cheating-severe
-      display-name: "Cheating grave / reincidência"
+      display-name: "Severe cheating / repeat offense"
       duration: "n"
       icon: BARRIER
-      description: "Reincidência grave; punição permanente"
+      description: "Severe repeat offense; permanent punishment"
   mute:
     - id: spam
-      display-name: "Spam no chat"
+      display-name: "Chat spam"
       duration: "1h"
       icon: PAPER
-      description: "Envio repetitivo de mensagens"
+      description: "Repetitive message sending"
     - id: toxicity
-      display-name: "Toxicidade"
+      display-name: "Toxicity"
       duration: "1d"
       icon: REDSTONE
-      description: "Ofensas ou discurso de ódio no chat"
+      description: "Insults or hate speech in chat"

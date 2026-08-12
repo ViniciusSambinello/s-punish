@@ -3,11 +3,6 @@ package com.spunish.common.service;
 import com.spunish.common.domain.Punishment;
 import com.spunish.common.duration.PunishmentDuration;
 
-/**
- * Every rejection reason from the {@code punishment/issuance} precedence
- * rules gets its own case so a caller can render the right configurable
- * message without string-matching a generic error.
- */
 public sealed interface IssueResult {
 
     record Success(Punishment applied, Punishment revokedByOverride) implements IssueResult {

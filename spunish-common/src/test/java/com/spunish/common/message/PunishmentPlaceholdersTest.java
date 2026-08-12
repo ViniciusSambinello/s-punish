@@ -39,8 +39,8 @@ class PunishmentPlaceholdersTest {
         assertThat(placeholders.get("actor")).isEqualTo("Console");
         assertThat(placeholders.get("reason-display")).isEqualTo("Hacking");
         assertThat(placeholders.get("punishment-id")).isEqualTo("ABC12345");
-        assertThat(placeholders.get("duration")).isEqualTo("permanente");
-        assertThat(placeholders.get("duration-remaining")).isEqualTo("permanente");
+        assertThat(placeholders.get("duration")).isEqualTo("permanent");
+        assertThat(placeholders.get("duration-remaining")).isEqualTo("permanent");
         assertThat(placeholders).doesNotContainKey("revoker");
     }
 

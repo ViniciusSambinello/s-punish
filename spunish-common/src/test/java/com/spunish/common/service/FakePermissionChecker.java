@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-/** Permissions are keyed per player UUID — granting to one actor must never leak to another. */
 final class FakePermissionChecker implements PermissionChecker {
 
     private final Map<UUID, Set<String>> permissionsByPlayer = new HashMap<>();

@@ -5,11 +5,11 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * A punishment record as persisted. {@code expiresAt == null} means permanent;
+ * {@code expiresAt == null} means the punishment is permanent;
  * {@code revokedAt == null} means the original application still stands.
- * {@code reasonDisplay} is denormalized on purpose — it must keep showing the
- * text that was in force when the punishment was applied, even if the catalog
- * later renames or removes that reason (see {@code punishment/catalog}).
+ * {@code reasonDisplay} must keep showing the text that was in force when the
+ * punishment was applied, even if the reason catalog later renames or removes
+ * that reason.
  */
 public record Punishment(
         long id,

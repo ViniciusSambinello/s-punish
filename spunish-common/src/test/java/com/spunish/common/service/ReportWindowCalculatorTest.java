@@ -15,9 +15,8 @@ class ReportWindowCalculatorTest {
 
     @Test
     void dailyWindowCutsAtMidnightInTheConfiguredZoneNotUtc() {
-        // 2026-01-02T01:30:00Z is already 2026-01-01T22:30:00-03:00 the previous
-        // day in America/Sao_Paulo — a UTC-midnight cutoff would wrongly place
-        // the window's start 3 hours into "today" UTC.
+        // Daily windows cut at midnight in the configured zone, not UTC midnight:
+        // 2026-01-02T01:30:00Z is still 2026-01-01 in America/Sao_Paulo (UTC-3).
         Instant now = Instant.parse("2026-01-02T01:30:00Z");
         ZoneId saoPaulo = ZoneOffset.ofHours(-3);
 

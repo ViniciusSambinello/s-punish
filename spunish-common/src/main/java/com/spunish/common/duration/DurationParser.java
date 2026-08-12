@@ -9,9 +9,7 @@ import java.util.regex.Pattern;
  * Parses the {@code <time>} argument shared by reason durations and the
  * {@code /punish} command: the literal {@code n} for permanent, or one or
  * more {@code quantity+unit} pairs with no separators (for example
- * {@code 30d} or {@code 1y6mo}). {@code mo} is checked before the
- * single-letter units so {@code mo} is never split into {@code m} + a
- * dangling {@code o}.
+ * {@code 30d} or {@code 1y6mo}).
  */
 public final class DurationParser {
 

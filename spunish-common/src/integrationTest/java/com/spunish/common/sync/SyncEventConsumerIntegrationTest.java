@@ -42,11 +42,9 @@ import java.util.logging.Logger;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Reproduces the exact race design.md decision 8 exists for: a transaction
- * that grabs a lower AUTO_INCREMENT id can still commit — and so become
- * visible — after a transaction that grabbed a higher one. Requires Docker;
- * skipped/failing without it is expected on a machine without a container
- * runtime (see docs/testing.md) — this runs in CI (section 13).
+ * A transaction that grabs a lower AUTO_INCREMENT id can still commit — and so
+ * become visible — after a transaction that grabbed a higher one; the sync
+ * consumer must not lose that event.
  */
 @Testcontainers
 class SyncEventConsumerIntegrationTest {
@@ -91,9 +89,7 @@ class SyncEventConsumerIntegrationTest {
             connA.setAutoCommit(false);
             connB.setAutoCommit(false);
 
-            // A inserts first (lower AUTO_INCREMENT id) but does not commit yet.
             idA = insertRawSyncEvent(connA, targetA, punishmentIdA, sharedCreatedAt);
-            // B inserts second (higher id) and commits immediately — visible before A.
             idB = insertRawSyncEvent(connB, targetB, punishmentIdB, sharedCreatedAt);
             connB.commit();
             assertThat(idB).isGreaterThan(idA);
@@ -101,7 +97,6 @@ class SyncEventConsumerIntegrationTest {
             List<SyncEvent> whileAStillOpen = syncEventRepository.pollSince(sharedCreatedAt.minusSeconds(5)).get();
             assertThat(whileAStillOpen).extracting(SyncEvent::id).containsExactly(idB);
 
-            // A finally commits — its lower id becomes visible only now, after B's higher id.
             connA.commit();
         }
 
@@ -115,12 +110,9 @@ class SyncEventConsumerIntegrationTest {
                 syncEventRepository, punishmentLookup, (ServerIdentity) () -> "consumer-under-test",
                 clock, listener, Logger.getLogger("consumer-test"), Duration.ofDays(1), 1_000);
 
-        // First poll: B is visible, A still is not (this call happens after A already
-        // committed above in real time, but the consumer's own overlap-window query
-        // is what's under test here, independent of that — it must pick up both.)
         consumer.pollOnce().get();
-        // Second poll, same overlap window: dedup must not re-deliver B, but must still
-        // deliver A now that its commit has landed — this is the "no event lost" guarantee.
+        // Same overlap window on the next poll: B must not be re-delivered, but A must
+        // still be delivered now that its commit has landed — the "no event lost" guarantee.
         consumer.pollOnce().get();
 
         assertThat(listener.deliveredPunishmentIds()).containsExactlyInAnyOrder(punishmentIdA, punishmentIdB);

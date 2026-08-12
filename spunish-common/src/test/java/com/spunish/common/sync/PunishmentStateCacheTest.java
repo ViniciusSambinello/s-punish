@@ -58,8 +58,7 @@ class PunishmentStateCacheTest {
 
     @Test
     void onPunishmentCreatedUpdatesAPreviouslyUnmutedTrackedPlayer() {
-        // Regression guard: a naive computeIfPresent-only implementation would
-        // silently drop this because there is no existing mute entry to update.
+        // A tracked player with no active mute must still pick up a newly created mute.
         PunishmentStateCache cache = new PunishmentStateCache();
         cache.track(playerUuid, null);
 

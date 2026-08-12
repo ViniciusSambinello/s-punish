@@ -17,11 +17,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
 /**
- * Resolves message keys (dot-paths under {@code messages:} in
- * {@code messages.yml}, e.g. {@code "punish.confirmation"}) to placeholder-substituted,
- * MiniMessage-rendered content. Falls back to the bundled default tree for a
- * key missing from the on-disk file, and reloads atomically: a syntactically
- * broken file leaves the previous snapshot untouched.
+ * Falls back to the bundled default message for a key missing from the
+ * on-disk {@code messages.yml}. A reload with a syntactically broken file
+ * leaves the previous messages in effect.
  */
 public final class MessageService {
 
@@ -43,8 +41,8 @@ public final class MessageService {
     }
 
     /**
-     * @return {@code false} (previous messages kept in effect) if {@code newRoot}
-     * cannot be turned into a valid snapshot — for example an out-of-range time zone.
+     * @return {@code false} if {@code newRoot} is invalid (for example an
+     * out-of-range time zone) — the previous messages stay in effect.
      */
     public boolean reload(ConfigurationNode newRoot) {
         try {
@@ -68,9 +66,6 @@ public final class MessageService {
         return out;
     }
 
-    /**
-     * Plain-text variant for audiences without Component rendering (console output).
-     */
     public List<String> renderPlain(String key, Map<String, String> placeholders) {
         return substitutedLines(key, placeholders);
     }
@@ -84,10 +79,8 @@ public final class MessageService {
     }
 
     /**
-     * The single configured zone used both for rendering instants and for
-     * computing calendar-aligned report windows (see {@code ReportWindowCalculator}) —
-     * there is deliberately only one "configured zone" in this plugin, not a
-     * separate one per concern.
+     * The configured zone also defines the calendar boundaries used for
+     * daily/weekly/monthly report windows.
      */
     public ZoneId zone() {
         return snapshot.get().dateTimeFormatter().zone();

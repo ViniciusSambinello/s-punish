@@ -20,10 +20,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 /**
- * Backs {@code /record}. A query is served from cache when a fresh-enough
- * entry exists for the same (category, window[, staffer]) key — regardless
- * of the requesting user's cooldown, since a cache hit runs no new
- * aggregation at all. Only a cache miss is subject to the per-user cooldown.
+ * A query is served from cache when a fresh-enough entry exists for the same
+ * (category, window[, staffer]) key, regardless of the requesting user's
+ * cooldown. Only a cache miss is subject to the per-user cooldown.
  */
 public final class ReportService {
 
@@ -68,7 +67,6 @@ public final class ReportService {
 
         CompletableFuture<Long> total = repository.countTotal(category, bounds.from(), bounds.to(), null);
         CompletableFuture<StateBreakdown> byState = repository.countByState(category, bounds.from(), bounds.to(), null);
-        // Over-fetch by one to know whether the ranking was truncated, same trick as history paging.
         CompletableFuture<List<StaffRanking>> ranking =
                 repository.rankByStaff(category, bounds.from(), bounds.to(), rankingLimit + 1);
         CompletableFuture<List<ReasonDistributionEntry>> reasons =

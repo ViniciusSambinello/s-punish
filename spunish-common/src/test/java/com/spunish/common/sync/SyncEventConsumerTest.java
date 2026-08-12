@@ -116,7 +116,7 @@ class SyncEventConsumerTest {
     void failedPollDoesNotAdvanceTheCursorAndRetriesTheSameWindow() throws Exception {
         events.failNext = true;
 
-        consumer.pollOnce().get(); // swallowed internally, never throws
+        consumer.pollOnce().get(); // a failed poll must not crash the consumer; the failure is swallowed
         Instant pollFromAfterFailure = events.lastRequestedSince;
 
         events.failNext = false;
@@ -179,7 +179,6 @@ class SyncEventConsumerTest {
         }
     }
 
-    /** Only findById is implemented — everything else is unused by the consumer. */
     private static final class FakePunishmentLookup implements PunishmentRepository {
         private final Map<Long, Punishment> byId = new ConcurrentHashMap<>();
 

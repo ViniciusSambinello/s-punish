@@ -52,3 +52,12 @@ report:
 # for the permanent case. A staffer matching no entry has no restriction.
 duration-limits:
   trial: 7d
+
+# Offered on top of the reason's own default when tab-completing /punish's
+# <time> argument.
+suggested-durations:
+  - 1h
+  - 1d
+  - 7d
+  - 30d
+  - n

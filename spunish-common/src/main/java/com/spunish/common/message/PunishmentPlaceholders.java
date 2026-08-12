@@ -11,12 +11,6 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * The placeholder set every punishment/revocation-related message shares
- * (task 3.11's "common placeholders" list) — built once here so screens,
- * announcements, GUI lore and console output all resolve the same tokens
- * the same way.
- */
 public final class PunishmentPlaceholders {
 
     private PunishmentPlaceholders() {

@@ -55,11 +55,6 @@ public final class MySqlSyncEventRepository implements SyncEventRepository {
         });
     }
 
-    /**
-     * Package-visible on purpose: only {@link MySqlPunishmentRepository} calls
-     * this, on the same open connection/transaction as the punishment write
-     * that caused the event.
-     */
     void writeOnConnection(
             Connection connection, SyncEventType type, long punishmentId, UUID targetUuid, String originServer, Instant createdAt)
             throws SQLException {

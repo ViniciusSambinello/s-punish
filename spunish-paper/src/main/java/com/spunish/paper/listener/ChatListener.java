@@ -15,9 +15,9 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Reads only from {@link com.spunish.common.sync.PunishmentStateCache} — no
- * storage access during chat processing (task 7.6). A muted message is
- * dropped entirely, never delivered and never logged to chat.
+ * Chat mute checks read only from the punishment state cache, never storage
+ * directly. A muted message is dropped entirely — never delivered and never
+ * logged to chat.
  */
 public final class ChatListener implements Listener {
 

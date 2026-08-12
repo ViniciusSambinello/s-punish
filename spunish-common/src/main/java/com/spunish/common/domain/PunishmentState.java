@@ -3,10 +3,8 @@ package com.spunish.common.domain;
 import java.time.Instant;
 
 /**
- * The exhaustive set of states a punishment can be in relative to a reference
- * instant. Sealed so every display and enforcement path is forced to handle
- * all three — the exact place where silently forgetting "expired" would let
- * a revoked-looking entry read as active.
+ * A punishment is in exactly one of three states relative to a reference
+ * instant: active, expired, or revoked.
  */
 public sealed interface PunishmentState {
 
@@ -23,7 +21,7 @@ public sealed interface PunishmentState {
 
     /**
      * Expiration is evaluated at read time against {@code reference}, never by a
-     * background sweep — so correctness never depends on a periodic task having run.
+     * background sweep — correctness never depends on a periodic task having run.
      */
     static PunishmentState resolve(Punishment punishment, Instant reference) {
         if (punishment.isRevoked()) {
