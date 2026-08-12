@@ -140,15 +140,15 @@
 
 ## 11. Empacotamento e testes de integração
 
-- [ ] 11.1 Configurar o Shadow nos dois módulos de plataforma, relocando HikariCP, driver MySQL e Configurate sob `com.spunish.libs`, com `mergeServiceFiles()` e Adventure mantido como `compileOnly`
-- [ ] 11.2 Escrever o teste de fumaça que carrega o jar shadeado e abre conexão real, provando que a relocation do driver sobreviveu
-- [ ] 11.3 Escrever os testes Testcontainers de migração: banco vazio, banco já atualizado, três inicializações simultâneas e schema mais novo que o binário
-- [ ] 11.4 Escrever os testes Testcontainers de `PunishmentRepository`: inserção, punição ativa, expiração pelo relógio do banco, revogação e histórico paginado
-- [ ] 11.5 Escrever os testes Testcontainers das agregações de relatório, incluindo revogadas contadas no total e a taxa de revogação
-- [ ] 11.6 Escrever o teste que confirma, por plano de execução, o uso de índice na verificação de login e na agregação por autor
-- [ ] 11.7 Escrever os testes Testcontainers de resolução de perfil: nome trocado e nome reutilizado por outra conta
-- [ ] 11.8 Escrever o teste da rotina de retenção, provando que punições ativas nunca são removidas
-- [ ] 11.9 Executar a matriz de teste manual da camada de plataforma em um Paper e um Velocity reais e registrar o resultado
+- [x] 11.1 Configurar o Shadow nos dois módulos de plataforma, relocando HikariCP, driver MySQL e Configurate sob `com.spunish.libs`, com `mergeServiceFiles()` e Adventure mantido como `compileOnly`
+- [x] 11.2 Escrever o teste de fumaça que carrega o jar shadeado e abre conexão real, provando que a relocation do driver sobreviveu
+- [x] 11.3 Escrever os testes Testcontainers de migração: banco vazio, banco já atualizado, três inicializações simultâneas e schema mais novo que o binário
+- [x] 11.4 Escrever os testes Testcontainers de `PunishmentRepository`: inserção, punição ativa, expiração pelo relógio do banco, revogação e histórico paginado
+- [x] 11.5 Escrever os testes Testcontainers das agregações de relatório, incluindo revogadas contadas no total e a taxa de revogação
+- [x] 11.6 Escrever o teste que confirma, por plano de execução, o uso de índice na verificação de login e na agregação por autor
+- [x] 11.7 Escrever os testes Testcontainers de resolução de perfil: nome trocado e nome reutilizado por outra conta
+- [x] 11.8 Escrever o teste da rotina de retenção, provando que punições ativas nunca são removidas
+- [ ] 11.9 Executar a matriz de teste manual da camada de plataforma em um Paper e um Velocity reais e registrar o resultado (requer infraestrutura real; não executado neste ambiente — ver nota sobre 10.6 em `docs/deployment.md`)
 
 ## 12. Documentação para o GitHub
 

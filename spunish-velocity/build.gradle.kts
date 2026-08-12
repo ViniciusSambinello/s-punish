@@ -1,3 +1,25 @@
+plugins {
+    alias(libs.plugins.shadow)
+}
+
+tasks.shadowJar {
+    archiveClassifier.set("")
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    // Bundled dependencies are relocated so another plugin on the same proxy
+    // bundling a different version of the same library can never collide with ours.
+    relocate("com.zaxxer.hikari", "com.spunish.libs.hikari")
+    relocate("com.mysql", "com.spunish.libs.mysql")
+    relocate("com.google.protobuf", "com.spunish.libs.protobuf")
+    relocate("org.spongepowered.configurate", "com.spunish.libs.configurate")
+    relocate("io.leangen.geantyref", "com.spunish.libs.geantyref")
+    relocate("net.kyori.option", "com.spunish.libs.option")
+    mergeServiceFiles()
+}
+
+tasks.build {
+    dependsOn(tasks.shadowJar)
+}
+
 dependencies {
     implementation(project(":spunish-common"))
     compileOnly(libs.velocity.api)
