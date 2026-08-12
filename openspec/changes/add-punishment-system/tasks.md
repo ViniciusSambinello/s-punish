@@ -152,15 +152,15 @@
 
 ## 12. Documentação para o GitHub
 
-- [ ] 12.1 Escrever o `README.md`: descrição, requisitos, instalação, tabela de comandos, tabela de permissões, exemplo de configuração e badges de CI
-- [ ] 12.2 Escrever `docs/configuration.md` cobrindo os quatro arquivos, cada chave e o comportamento da recarga atômica
-- [ ] 12.3 Escrever `docs/permissions.md` com a tabela completa de nodes e exemplos de grupos de staff
-- [ ] 12.4 Escrever `docs/database.md` com o schema, os índices, o significado de `expires_at` nulo e a política de retenção
-- [ ] 12.5 Escrever `docs/deployment.md` com a ordem de implantação, o dimensionamento de pool no proxy, os modos de falha e a instrução de negar os comandos vanilla de punição
-- [ ] 12.6 Escrever `docs/testing.md` com a matriz de teste manual da camada de plataforma
-- [ ] 12.7 Escrever `docs/troubleshooting.md` cobrindo falha de conexão, schema à frente do binário, latência de propagação e mensagem sem formatação por tag malformada
-- [ ] 12.8 Escrever `CONTRIBUTING.md` com o modelo de branches, Conventional Commits, escopos aceitos e como rodar os testes
-- [ ] 12.9 Adicionar `LICENSE`, `CHANGELOG.md` no formato Keep a Changelog, e os templates de issue e de pull request em `.github/`
+- [x] 12.1 Escrever o `README.md`: descrição, requisitos, instalação, tabela de comandos, tabela de permissões, exemplo de configuração e badges de CI
+- [x] 12.2 Escrever `docs/configuration.md` cobrindo os quatro arquivos, cada chave e o comportamento da recarga atômica
+- [x] 12.3 Escrever `docs/permissions.md` com a tabela completa de nodes e exemplos de grupos de staff
+- [x] 12.4 Escrever `docs/database.md` com o schema, os índices, o significado de `expires_at` nulo e a política de retenção
+- [x] 12.5 Escrever `docs/deployment.md` com a ordem de implantação, o dimensionamento de pool no proxy, os modos de falha e a instrução de negar os comandos vanilla de punição
+- [x] 12.6 Escrever `docs/testing.md` com a matriz de teste manual da camada de plataforma
+- [x] 12.7 Escrever `docs/troubleshooting.md` cobrindo falha de conexão, schema à frente do binário, latência de propagação e mensagem sem formatação por tag malformada
+- [x] 12.8 Escrever `CONTRIBUTING.md` com o modelo de branches, Conventional Commits, escopos aceitos e como rodar os testes
+- [x] 12.9 Adicionar `LICENSE`, `CHANGELOG.md` no formato Keep a Changelog, e os templates de issue e de pull request em `.github/`
 
 ## 13. CI e release
 

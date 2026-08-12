@@ -1,67 +1,83 @@
 # Deployment
 
-## Coordenadas de runtime (verificadas em 2026-08-11)
+## Runtime coordinates (verified 2026-08-11)
 
-A premissa de `design.md` — que "Paper 26.2" é a API Paper para a versão 26.2 do
-Minecraft — foi confirmada. Nenhum rebaixamento de toolchain foi necessário.
+`design.md`'s premise — that "Paper 26.2" is the Paper API for Minecraft
+1.26.2 — was confirmed. No toolchain downgrade was necessary.
 
-| Item | Valor |
+| Item | Value |
 | --- | --- |
 | Paper API | `io.papermc.paper:paper-api:26.2.build.112-stable` |
 | Velocity API | `com.velocitypowered:velocity-api:4.0.0` |
-| Repositório dos dois artefatos | `https://repo.papermc.io/repository/maven-public/` |
-| Java exigido pelo Paper 26.2 | 25 |
-| Java exigido pelo Velocity (setup atual) | 25 |
-| Build tool | Gradle 9.7.0 (suporta daemon em Java 25 a partir da linha 9.1, mas builds anteriores a 9.7 reportaram falso-negativo de compatibilidade com Java 25 sob o plugin Kotlin JVM — fora do caminho deste projeto, que não compila Kotlin) |
+| Repository for both artifacts | `https://repo.papermc.io/repository/maven-public/` |
+| Java required by Paper 26.2 | 25 |
+| Java required by Velocity (this setup) | 25 |
+| Build tool | Gradle 9.7.0 |
 
-Toolchain do projeto fixado em Java 25 em `build.gradle.kts` (convenção raiz), sem
-plano de rebaixamento: ambos os runtimes o suportam nativamente.
+The project's toolchain is pinned to Java 25 in the root `build.gradle.kts`
+convention, with no downgrade planned — both runtimes support it natively.
 
-`velocity-api` está pareado na versão estável `4.0.0` em vez do snapshot
-`4.1.0-SNAPSHOT` em desenvolvimento — a documentação oficial de compatibilidade
-do Velocity (`docs.papermc.io/velocity/server-compatibility`) confirma suporte
-até a versão 26.2 do Minecraft já na linha estável, e uma dependência de build
-não deve apontar para um SNAPSHOT.
+`velocity-api` is pinned to the stable `4.0.0` release rather than the
+in-development `4.1.0-SNAPSHOT` — Velocity's own compatibility documentation
+confirms support up to Minecraft 1.26.2 already on the stable line, and a
+build dependency should never point at a SNAPSHOT.
 
-## Ordem de implantação
+## Deployment order
 
-1. Provisionar o MySQL 8.0+ e o usuário da aplicação; conferir alcance a partir
-   do proxy e de todos os backends.
-2. Subir **um** backend com o plugin. As migrações criam o schema na primeira
-   inicialização.
-3. Validar aplicação, expiração, histórico e relatório nesse backend isolado.
-4. Distribuir aos demais backends com o mesmo `config.yml`, alterando apenas o
-   identificador de servidor (`server.id`).
-5. Instalar o módulo Velocity por último — os backends já bloqueiam login
-   sozinhos, então a borda é reforço, não pré-requisito.
-6. Negar os comandos vanilla de punição (`minecraft.command.ban`,
-   `minecraft.command.pardon`, `minecraft.command.ban-ip`, etc.) à staff.
+1. Provision MySQL 8.0+ and the application user; confirm it's reachable
+   from the proxy and from every backend.
+2. Start **one** backend with the plugin. Migrations create the schema on
+   first boot.
+3. Validate issuance, expiration, history and reporting on that single
+   backend before rolling out further.
+4. Roll out to the remaining backends with the same `config.yml`, changing
+   only `server.id` on each.
+5. Install the Velocity module last — backends already block login on
+   their own, so the proxy module is reinforcement, not a prerequisite.
+6. Deny the vanilla punishment commands (`minecraft.command.ban`,
+   `minecraft.command.pardon`, `minecraft.command.ban-ip`, etc.) to staff,
+   so SPunish is the only path to punish someone.
 
-## Dimensionamento do pool no proxy
+## Proxy connection pool sizing
 
-O Velocity só faz leitura de ban no login e consumo de eventos de sync — um
-pool pequeno é suficiente mesmo em redes grandes. O `config.yml` que o módulo
-Velocity cria no primeiro boot (`spunish-velocity`'s bundled default, distinto
-do `config.yml` de cada backend) já vem com `maximum-pool-size: 4` e
-`minimum-idle: 1`; não aumente esses valores a menos que o proxy sirva um
-número muito grande de backends simultaneamente.
+Velocity only ever reads an active ban at login and consumes sync events —
+a small pool is enough even for a large network. The `config.yml` the
+Velocity module creates on first boot (a bundled default distinct from each
+backend's own `config.yml`) already ships with `maximum-pool-size: 4` and
+`minimum-idle: 1`; don't raise those unless the proxy is serving an unusually
+large number of backends at once.
 
-## Verificação manual da borda (proxy ausente)
+## Fail modes
 
-Requer infraestrutura real (um Paper com o plugin, MySQL, e opcionalmente o
-Velocity) e por isso não foi executada neste ambiente — apenas documentada
-aqui para quem for validar um deployment real (ver também a seção 11.9 do
-`tasks.md`, que cobre a mesma matriz de teste manual de forma mais ampla):
+`fail-mode.login` and `fail-mode.chat` in `config.yml` each independently
+control what happens when storage is unreachable:
 
-1. Aplique um ban de teste diretamente no backend (`/punish <player> ban <reason> <time>`).
-2. Sem o módulo Velocity instalado em nenhum proxy, conecte-se diretamente à
-   porta do backend (bypassando qualquer proxy) com o jogador banido.
-3. Confirme que o login é recusado com a tela de ban configurável — ou seja,
-   que o enforcement do backend por si só já é suficiente, e o módulo
-   Velocity é reforço de borda, não pré-requisito (consistente com a ordem
-   de implantação acima, que instala o Velocity por último).
+- **`login`** (default `DENY`) — the ban check at login. `DENY` refuses
+  login with the configurable storage-unavailable message during an outage,
+  so a banned player can never slip in while the database is down. `ALLOW`
+  lets everyone in, banned or not, until storage recovers.
+- **`chat`** (default `ALLOW`) — the mute-state lookup that seeds a
+  player's chat cache at login. `ALLOW` seeds "not muted"; `DENY` denies the
+  login outright instead, since there's no representable "blocked pending
+  resolution" state in the chat cache.
 
-## Modos de falha
+Both apply on every platform that performs the corresponding check (Paper
+backends for both; the Velocity proxy for `login` only, since it never
+touches chat). See [troubleshooting.md](troubleshooting.md) for what an
+outage looks like from the affected commands' point of view.
 
-Ver `docs/troubleshooting.md` (seção 12) para o comportamento de `DENY`/`ALLOW`
-quando o armazenamento está indisponível.
+## Manual edge verification (proxy absent)
+
+Requires real infrastructure (a Paper backend with the plugin, and MySQL)
+and was therefore not executed in the sandbox this project was built in —
+documented here for whoever validates a real deployment (see also
+`docs/testing.md`, which covers the same manual matrix more broadly):
+
+1. Apply a test ban directly on the backend
+   (`/punish <player> ban <reason> <time>`).
+2. With no Velocity module installed on any proxy, connect directly to the
+   backend's port (bypassing any proxy) as the banned player.
+3. Confirm the login is refused with the configurable ban screen — i.e.
+   that the backend's own enforcement is sufficient by itself, and the
+   Velocity module is edge reinforcement, not a prerequisite (consistent
+   with installing it last in the deployment order above).
