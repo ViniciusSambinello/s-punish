@@ -4,7 +4,7 @@
 # placeholders are substituted per-message; an unknown {token} is left literal.
 # {prefix} is available everywhere and comes from the `prefix` key below.
 
-prefix: "<gray>[<gold>SPunish</gold>]</gray> "
+prefix: "<gray>[<gold>s-punish</gold>]</gray> "
 
 date-time:
   pattern: "dd/MM/yyyy HH:mm"
