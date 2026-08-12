@@ -131,12 +131,12 @@
 
 ## 10. Módulo Velocity
 
-- [ ] 10.1 Criar a classe de plugin Velocity com anotação de plugin, carregando as mesmas configurações e serviços de `spunish-common`
-- [ ] 10.2 Implementar as portas de plataforma do Velocity: permissão, audiência, desconexão, dispatcher e identidade
-- [ ] 10.3 Implementar a verificação de ban no evento de login do proxy, recusando antes de encaminhar a qualquer backend, com o mesmo texto configurável dos backends
-- [ ] 10.4 Implementar o consumo de eventos de sync no proxy, desconectando da rede o jogador banido em outro servidor
-- [ ] 10.5 Configurar o pool de conexões do proxy com dimensionamento reduzido e documentar a recomendação
-- [ ] 10.6 Verificar manualmente que um backend recusa o login de jogador banido com o módulo de proxy ausente e em conexão direta à porta do backend
+- [x] 10.1 Criar a classe de plugin Velocity com anotação de plugin, carregando as mesmas configurações e serviços de `spunish-common`
+- [x] 10.2 Implementar as portas de plataforma do Velocity: permissão, audiência, desconexão, dispatcher e identidade
+- [x] 10.3 Implementar a verificação de ban no evento de login do proxy, recusando antes de encaminhar a qualquer backend, com o mesmo texto configurável dos backends
+- [x] 10.4 Implementar o consumo de eventos de sync no proxy, desconectando da rede o jogador banido em outro servidor
+- [x] 10.5 Configurar o pool de conexões do proxy com dimensionamento reduzido e documentar a recomendação
+- [ ] 10.6 Verificar manualmente que um backend recusa o login de jogador banido com o módulo de proxy ausente e em conexão direta à porta do backend (requer Paper+MySQL reais; procedimento documentado em `docs/deployment.md`, não executado neste ambiente)
 
 ## 11. Empacotamento e testes de integração
 

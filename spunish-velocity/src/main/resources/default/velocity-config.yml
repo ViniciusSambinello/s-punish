@@ -1,0 +1,50 @@
+# The proxy only ever reads an active ban and consumes sync events — it
+# never issues, revokes, or reports on punishments, and never tracks mutes.
+# retention, mute, report, duration-limits and suggested-durations below are
+# ignored on this platform; they exist only because config.yml's schema is
+# shared with the backend plugin. The pool is sized small for the same
+# reason: a proxy needs far fewer concurrent connections than a backend.
+database:
+  host: localhost
+  port: 3306
+  database: spunish
+  user: spunish
+  password: "changeme"
+  table-prefix: "sp_"
+  use-ssl: false
+  pool:
+    maximum-pool-size: 4
+    minimum-idle: 1
+    connection-timeout-ms: 5000
+    max-lifetime-ms: 1800000
+  query-timeout-ms: 5000
+
+server:
+  # Blank means "derive a stable identifier and warn" — see punishment/network-sync.
+  id: ""
+
+sync:
+  poll-interval-ms: 2000
+  overlap-ms: 1000
+  event-retention-ms: 300000
+
+fail-mode:
+  login: DENY
+  chat: ALLOW
+
+retention:
+  enabled: false
+  retention-days: 365
+
+mute:
+  blocked-commands: []
+  warning-cooldown-ms: 3000
+
+report:
+  cooldown-ms: 5000
+  cache-duration-ms: 30000
+  ranking-limit: 10
+
+duration-limits: {}
+
+suggested-durations: []

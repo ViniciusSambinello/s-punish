@@ -39,9 +39,27 @@ não deve apontar para um SNAPSHOT.
 
 ## Dimensionamento do pool no proxy
 
-O Velocity só faz leitura de ban no pré-login e consumo de eventos de sync — um
-pool pequeno (2 a 4 conexões) é suficiente mesmo em redes grandes. Ver
-`database.pool.velocity-*` em `config.yml` quando a seção 10 configurar isso.
+O Velocity só faz leitura de ban no login e consumo de eventos de sync — um
+pool pequeno é suficiente mesmo em redes grandes. O `config.yml` que o módulo
+Velocity cria no primeiro boot (`spunish-velocity`'s bundled default, distinto
+do `config.yml` de cada backend) já vem com `maximum-pool-size: 4` e
+`minimum-idle: 1`; não aumente esses valores a menos que o proxy sirva um
+número muito grande de backends simultaneamente.
+
+## Verificação manual da borda (proxy ausente)
+
+Requer infraestrutura real (um Paper com o plugin, MySQL, e opcionalmente o
+Velocity) e por isso não foi executada neste ambiente — apenas documentada
+aqui para quem for validar um deployment real (ver também a seção 11.9 do
+`tasks.md`, que cobre a mesma matriz de teste manual de forma mais ampla):
+
+1. Aplique um ban de teste diretamente no backend (`/punish <player> ban <reason> <time>`).
+2. Sem o módulo Velocity instalado em nenhum proxy, conecte-se diretamente à
+   porta do backend (bypassando qualquer proxy) com o jogador banido.
+3. Confirme que o login é recusado com a tela de ban configurável — ou seja,
+   que o enforcement do backend por si só já é suficiente, e o módulo
+   Velocity é reforço de borda, não pré-requisito (consistente com a ordem
+   de implantação acima, que instala o Velocity por último).
 
 ## Modos de falha
 
