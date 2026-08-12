@@ -13,12 +13,6 @@ final class GuiItems {
     private GuiItems() {
     }
 
-    /**
-     * These are menu buttons, not real equipment — any vanilla tooltip
-     * addition (attack damage/speed for a sword icon, armor toughness for an
-     * armor icon, "can be placed on", etc.) would be noise the player didn't
-     * configure, so every such addition is hidden regardless of icon material.
-     */
     static ItemStack of(String materialName, Component name, List<Component> lore) {
         ItemStack stack = new ItemStack(resolveMaterial(materialName));
         ItemMeta meta = stack.getItemMeta();

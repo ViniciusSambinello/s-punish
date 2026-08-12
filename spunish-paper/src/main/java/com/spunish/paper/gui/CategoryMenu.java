@@ -12,8 +12,7 @@ import org.bukkit.event.inventory.ClickType;
 import java.util.Map;
 
 /**
- * Shows only the categories the author may apply (issuance spec) — a
- * category the author lacks permission for never appears here.
+ * Shows only the categories the author may apply.
  */
 final class CategoryMenu extends Menu {
 

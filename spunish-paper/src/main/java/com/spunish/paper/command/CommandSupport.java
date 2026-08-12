@@ -10,11 +10,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 
-/**
- * Shared plumbing every command needs: rendering a message key back to the
- * sender, and resolving a target name with a consistent not-found /
- * internal-error fallback.
- */
 public final class CommandSupport {
 
     private CommandSupport() {
@@ -27,11 +22,6 @@ public final class CommandSupport {
         }
     }
 
-    /**
-     * @param onFound called on whichever thread the resolution completed on —
-     *                 callers must hop back to the main thread themselves before
-     *                 touching any Bukkit API that requires it.
-     */
     public static void resolveTarget(
             SPunishServices services, PlayerResolver resolver, CommandSender sender, String name,
             Consumer<PunishmentTarget> onFound) {

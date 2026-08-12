@@ -30,8 +30,7 @@ import java.util.logging.Level;
 
 /**
  * {@code staffer == null} is the staff-wide report; otherwise the report is
- * restricted to that staffer's own punishments (reporting spec). Switching
- * windows reloads asynchronously without closing the GUI.
+ * restricted to that staffer's own punishments.
  */
 final class ReportMenu extends Menu {
 

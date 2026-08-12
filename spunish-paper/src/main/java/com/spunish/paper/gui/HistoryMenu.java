@@ -17,8 +17,7 @@ import java.util.Optional;
 import java.util.logging.Level;
 
 /**
- * Filtering resets to the first page (history spec) and every page is
- * fetched on demand — nothing beyond the visible page is ever loaded.
+ * Filtering resets to the first page.
  */
 final class HistoryMenu extends Menu {
 

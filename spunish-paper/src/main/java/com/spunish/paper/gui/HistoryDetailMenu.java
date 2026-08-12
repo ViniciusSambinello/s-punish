@@ -15,8 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The full detail of one punishment, including its identifier and origin
- * server (history spec) — for reporting back on an appeal.
+ * Full detail of one punishment, including its identifier and origin server.
  */
 final class HistoryDetailMenu extends Menu {
 

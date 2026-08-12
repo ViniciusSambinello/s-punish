@@ -15,9 +15,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Hides reasons the author lacks permission for (issuance spec) and applies
- * the clicked reason's own default duration — the GUI path never takes an
- * explicit duration.
+ * Hides reasons the author lacks permission for. Applies the clicked
+ * reason's own default duration; the GUI path never takes an explicit one.
  */
 final class ReasonMenu extends Menu {
 

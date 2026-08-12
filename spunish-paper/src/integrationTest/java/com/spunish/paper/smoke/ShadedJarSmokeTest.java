@@ -15,11 +15,6 @@ import java.util.Properties;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-/**
- * Proves the shaded jar's MySQL driver relocation actually survived: the
- * relocated class opens a real connection, and the original, unrelocated
- * class name no longer resolves at all.
- */
 @Testcontainers
 class ShadedJarSmokeTest {
 

@@ -9,9 +9,6 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * Every GUI in this plugin routes clicks through {@link MenuListener} rather
- * than a per-command listener, and every click is cancelled — these menus are
- * selection surfaces, not real inventories items can be moved into or out of.
  * Closing a menu without clicking a selection never creates or changes any record.
  */
 public abstract class Menu implements InventoryHolder {
