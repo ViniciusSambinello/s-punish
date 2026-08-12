@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-08-12
+
 ### Added
 
 - Network-wide punishment system for Paper backends behind a Velocity proxy,
@@ -35,4 +37,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Shaded, relocated platform jars for both Paper and Velocity, with a smoke
   test proving the relocated MySQL driver opens a real connection.
 
-[Unreleased]: https://github.com/ViniciusSambinello/s-punish/compare/main...develop
+[Unreleased]: https://github.com/ViniciusSambinello/s-punish/compare/v0.1.0...develop
+[0.1.0]: https://github.com/ViniciusSambinello/s-punish/releases/tag/v0.1.0
