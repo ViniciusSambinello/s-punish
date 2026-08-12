@@ -41,10 +41,13 @@ public interface PunishmentRepository {
     CompletableFuture<Optional<Punishment>> findByPublicId(String publicId);
 
     /**
+     * @param originServer this instance's identity, recorded on the
+     *                      {@code PUNISHMENT_REVOKED} sync event written in the
+     *                      same transaction as the revocation (task 6.1).
      * @return {@code true} if a row was actually revoked; {@code false} if the
      * punishment did not exist or was already revoked (caller races safely).
      */
-    CompletableFuture<Boolean> revoke(long punishmentId, Actor revoker, Instant revokedAt, String revokeReason);
+    CompletableFuture<Boolean> revoke(long punishmentId, Actor revoker, Instant revokedAt, String revokeReason, String originServer);
 
     /**
      * Plain limit/offset, not "page number" — callers that over-fetch by one

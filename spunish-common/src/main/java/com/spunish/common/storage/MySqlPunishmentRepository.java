@@ -28,19 +28,34 @@ public final class MySqlPunishmentRepository implements PunishmentRepository {
     private final DataSource dataSource;
     private final IoExecutor ioExecutor;
     private final TableNames tables;
+    private final MySqlSyncEventRepository syncEvents;
     private final PublicIdGenerator publicIdGenerator = new PublicIdGenerator();
 
-    public MySqlPunishmentRepository(DataSource dataSource, IoExecutor ioExecutor, TableNames tables) {
+    public MySqlPunishmentRepository(
+            DataSource dataSource, IoExecutor ioExecutor, TableNames tables, MySqlSyncEventRepository syncEvents) {
         this.dataSource = dataSource;
         this.ioExecutor = ioExecutor;
         this.tables = tables;
+        this.syncEvents = syncEvents;
     }
 
     @Override
     public CompletableFuture<Punishment> insert(InsertPunishmentCommand command) {
         return ioExecutor.submit(() -> {
             try (Connection connection = dataSource.getConnection()) {
-                return insertOnConnection(connection, command);
+                connection.setAutoCommit(false);
+                try {
+                    Punishment applied = insertOnConnection(connection, command);
+                    syncEvents.writeOnConnection(connection, SyncEventType.PUNISHMENT_CREATED,
+                            applied.id(), applied.targetUuid(), applied.originServer(), applied.createdAt());
+                    connection.commit();
+                    return applied;
+                } catch (SQLException | RuntimeException e) {
+                    connection.rollback();
+                    throw e;
+                } finally {
+                    connection.setAutoCommit(true);
+                }
             }
         });
     }
@@ -53,7 +68,13 @@ public final class MySqlPunishmentRepository implements PunishmentRepository {
                 connection.setAutoCommit(false);
                 try {
                     Punishment revoked = revokeOnConnection(connection, previousPunishmentId, revoker, revokedAt, revokeReason);
+                    syncEvents.writeOnConnection(connection, SyncEventType.PUNISHMENT_REVOKED,
+                            revoked.id(), revoked.targetUuid(), newPunishment.originServer(), revokedAt);
+
                     Punishment applied = insertOnConnection(connection, newPunishment);
+                    syncEvents.writeOnConnection(connection, SyncEventType.PUNISHMENT_CREATED,
+                            applied.id(), applied.targetUuid(), applied.originServer(), applied.createdAt());
+
                     connection.commit();
                     return new OverrideResult(applied, revoked);
                 } catch (SQLException | RuntimeException e) {
@@ -161,14 +182,25 @@ public final class MySqlPunishmentRepository implements PunishmentRepository {
     }
 
     @Override
-    public CompletableFuture<Boolean> revoke(long punishmentId, Actor revoker, Instant revokedAt, String revokeReason) {
+    public CompletableFuture<Boolean> revoke(
+            long punishmentId, Actor revoker, Instant revokedAt, String revokeReason, String originServer) {
         return ioExecutor.submit(() -> {
             try (Connection connection = dataSource.getConnection()) {
+                connection.setAutoCommit(false);
                 try {
-                    revokeOnConnection(connection, punishmentId, revoker, revokedAt, revokeReason);
+                    Punishment revoked = revokeOnConnection(connection, punishmentId, revoker, revokedAt, revokeReason);
+                    syncEvents.writeOnConnection(connection, SyncEventType.PUNISHMENT_REVOKED,
+                            revoked.id(), revoked.targetUuid(), originServer, revokedAt);
+                    connection.commit();
                     return true;
                 } catch (AlreadyRevokedOrMissingException notApplied) {
+                    connection.rollback();
                     return false;
+                } catch (SQLException | RuntimeException e) {
+                    connection.rollback();
+                    throw e;
+                } finally {
+                    connection.setAutoCommit(true);
                 }
             }
         });

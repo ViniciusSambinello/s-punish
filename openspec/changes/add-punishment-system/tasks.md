@@ -75,13 +75,13 @@
 
 ## 6. Sincronização de rede
 
-- [ ] 6.1 Implementar `SyncEventRepository` com escrita de evento na mesma transação da punição e da revogação
-- [ ] 6.2 Implementar o consumidor com polling por `created_at` e janela de sobreposição, deduplicando por id contra um conjunto limitado de ids recentes
-- [ ] 6.3 Implementar o descarte de eventos consumidos por retenção curta configurável
-- [ ] 6.4 Implementar a identidade de servidor configurável, com derivação estável e aviso em log quando ausente, e o descarte do evento originado pela própria instância
-- [ ] 6.5 Implementar `PunishmentStateCache` por jogador conectado, carregado no login, atualizado por punição local e por evento de sync, e descartado no quit
-- [ ] 6.6 Garantir que falha no consumo registre no log, preserve o enforcement local, não desabilite o plugin e retome do último evento processado
-- [ ] 6.7 Escrever teste de integração do consumidor com commits concorrentes fora de ordem de `AUTO_INCREMENT`, provando que nenhum evento é perdido
+- [x] 6.1 Implementar `SyncEventRepository` com escrita de evento na mesma transação da punição e da revogação
+- [x] 6.2 Implementar o consumidor com polling por `created_at` e janela de sobreposição, deduplicando por id contra um conjunto limitado de ids recentes
+- [x] 6.3 Implementar o descarte de eventos consumidos por retenção curta configurável
+- [x] 6.4 Implementar a identidade de servidor configurável, com derivação estável e aviso em log quando ausente, e o descarte do evento originado pela própria instância
+- [x] 6.5 Implementar `PunishmentStateCache` por jogador conectado, carregado no login, atualizado por punição local e por evento de sync, e descartado no quit
+- [x] 6.6 Garantir que falha no consumo registre no log, preserve o enforcement local, não desabilite o plugin e retome do último evento processado
+- [x] 6.7 Escrever teste de integração do consumidor com commits concorrentes fora de ordem de `AUTO_INCREMENT`, provando que nenhum evento é perdido
 
 ## 7. Módulo Paper — bootstrap e enforcement
 

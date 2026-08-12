@@ -4,6 +4,7 @@ import com.spunish.common.domain.Actor;
 import com.spunish.common.domain.PunishmentCategory;
 import com.spunish.common.domain.SystemClock;
 import com.spunish.common.platform.PermissionChecker;
+import com.spunish.common.platform.ServerIdentity;
 import com.spunish.common.storage.PunishmentRepository;
 
 import java.time.Instant;
@@ -15,11 +16,14 @@ public final class PunishmentRevokeService {
 
     private final PunishmentRepository repository;
     private final SystemClock clock;
+    private final ServerIdentity serverIdentity;
     private final PermissionChecker permissionChecker;
 
-    public PunishmentRevokeService(PunishmentRepository repository, SystemClock clock, PermissionChecker permissionChecker) {
+    public PunishmentRevokeService(
+            PunishmentRepository repository, SystemClock clock, ServerIdentity serverIdentity, PermissionChecker permissionChecker) {
         this.repository = repository;
         this.clock = clock;
+        this.serverIdentity = serverIdentity;
         this.permissionChecker = permissionChecker;
     }
 
@@ -36,7 +40,7 @@ public final class PunishmentRevokeService {
                     }
                     long id = existing.get().id();
                     Instant revokedAt = clock.now();
-                    return repository.revoke(id, revoker, revokedAt, revokeReason).thenCompose(applied -> {
+                    return repository.revoke(id, revoker, revokedAt, revokeReason, serverIdentity.id()).thenCompose(applied -> {
                         if (!applied) {
                             // Raced with another revocation between findActive and revoke.
                             return CompletableFuture.completedFuture((RevokeResult) new RevokeResult.NoActivePunishment());

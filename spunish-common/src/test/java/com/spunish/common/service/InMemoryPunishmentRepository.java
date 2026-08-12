@@ -83,7 +83,8 @@ final class InMemoryPunishmentRepository implements PunishmentRepository {
     }
 
     @Override
-    public CompletableFuture<Boolean> revoke(long punishmentId, Actor revoker, Instant revokedAt, String revokeReason) {
+    public CompletableFuture<Boolean> revoke(
+            long punishmentId, Actor revoker, Instant revokedAt, String revokeReason, String originServer) {
         return CompletableFuture.completedFuture(revokeNow(punishmentId, revoker, revokedAt, revokeReason) != null);
     }
 

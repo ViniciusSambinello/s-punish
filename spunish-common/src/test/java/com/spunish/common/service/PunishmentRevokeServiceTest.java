@@ -35,7 +35,7 @@ class PunishmentRevokeServiceTest {
         permissions = new FakePermissionChecker();
         issueService = new PunishmentIssueService(
                 repository, clock, (ServerIdentity) () -> "test-server", permissions, Map::of);
-        revokeService = new PunishmentRevokeService(repository, clock, permissions);
+        revokeService = new PunishmentRevokeService(repository, clock, (ServerIdentity) () -> "test-server", permissions);
 
         permissions.grant(staffActor, "spunish.punish.ban");
     }

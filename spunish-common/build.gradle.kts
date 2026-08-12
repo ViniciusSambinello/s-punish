@@ -1,3 +1,30 @@
+// Testcontainers-backed tests get their own source set/task, kept out of
+// `test`/`build` on purpose: they need Docker, which a plain dev machine or
+// this repo's default local checks should never have to assume. CI (section 13)
+// runs both `test` and `integrationTest` explicitly.
+sourceSets {
+    create("integrationTest") {
+        java.srcDir("src/integrationTest/java")
+        resources.srcDir("src/integrationTest/resources")
+        compileClasspath += sourceSets.main.get().output
+        runtimeClasspath += output + compileClasspath
+    }
+}
+
+val integrationTestImplementation by configurations.getting {
+    extendsFrom(configurations.testImplementation.get())
+}
+configurations["integrationTestRuntimeOnly"].extendsFrom(configurations.testRuntimeOnly.get())
+
+tasks.register<Test>("integrationTest") {
+    description = "Runs Testcontainers-backed integration tests. Requires Docker."
+    group = "verification"
+    testClassesDirs = sourceSets["integrationTest"].output.classesDirs
+    classpath = sourceSets["integrationTest"].runtimeClasspath
+    useJUnitPlatform()
+    shouldRunAfter(tasks.test)
+}
+
 dependencies {
     compileOnly(libs.adventure.api)
     compileOnly(libs.adventure.minimessage)
@@ -16,10 +43,13 @@ dependencies {
     testImplementation(libs.adventure.api)
     testImplementation(libs.adventure.minimessage)
 
-    testImplementation(platform(libs.testcontainers.bom))
-    testImplementation(libs.testcontainers.junit.jupiter)
-    testImplementation(libs.testcontainers.mysql)
-
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.junit.jupiter)
+
+    integrationTestImplementation(platform(libs.junit.bom))
+    integrationTestImplementation(libs.junit.jupiter)
+    integrationTestImplementation(libs.assertj.core)
+    integrationTestImplementation(platform(libs.testcontainers.bom))
+    integrationTestImplementation(libs.testcontainers.junit.jupiter)
+    integrationTestImplementation(libs.testcontainers.mysql)
 }
