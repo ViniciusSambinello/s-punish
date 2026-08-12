@@ -14,8 +14,8 @@ import java.util.logging.Level;
 
 /**
  * Refuses a banned player at login, before they are forwarded to any
- * backend (enforcement spec) — the same configurable ban screen a backend
- * shows. On a storage failure, the configured login fail mode applies.
+ * backend, with the same configurable ban screen a backend shows. On a
+ * storage failure, the configured login fail mode applies.
  */
 final class BanLoginListener {
 

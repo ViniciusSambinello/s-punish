@@ -34,12 +34,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 /**
- * The proxy needs far less than a backend: no reason catalog, no GUIs, no
- * issuance/revocation/history/reporting services — only what {@code
- * punishment/enforcement} and {@code punishment/network-sync} ask of it: a
- * live ban check at login, and sync consumption to disconnect a player
- * banned elsewhere. Schema migration is the backend's job (deployment.md);
- * the proxy only ever reads.
+ * The proxy only checks bans at login and consumes sync events to disconnect
+ * a player banned elsewhere; it never issues, revokes, or reports on
+ * punishments, and never runs schema migrations — that stays the backend's job.
  */
 public final class SPunishVelocityServices implements AutoCloseable {
 
@@ -75,7 +72,7 @@ public final class SPunishVelocityServices implements AutoCloseable {
 
     public static SPunishVelocityServices bootstrap(ProxyServer server, Path dataDirectory)
             throws SPunishVelocityBootstrapException {
-        Logger logger = Logger.getLogger("SPunish");
+        Logger logger = Logger.getLogger("s-punish");
 
         SpunishConfig config = loadConfig(dataDirectory);
         MessageService messageService = loadMessages(dataDirectory, logger);
