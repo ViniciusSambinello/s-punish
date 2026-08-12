@@ -85,10 +85,7 @@ public final class MessageService {
     }
 
     /**
-     * The {@code active}/{@code expired}/{@code revoked} label a punishment's
-     * current state is always shown as (history and reporting specs) — the raw
-     * MiniMessage source, meant to be embedded as a {@code {state}} placeholder
-     * value and rendered together with the message that embeds it.
+     * @return the raw, unrendered MiniMessage source for this state's label.
      */
     public String stateLabelText(PunishmentState state) {
         String key = switch (state) {

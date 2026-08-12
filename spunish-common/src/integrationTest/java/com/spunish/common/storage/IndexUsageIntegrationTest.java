@@ -16,11 +16,6 @@ import java.util.logging.Logger;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * The login ban check and the per-staffer report aggregation are both on hot
- * paths (every login; every /record with a staffer) — each must hit its
- * covering index, never a full table scan.
- */
 @Testcontainers
 class IndexUsageIntegrationTest {
 
@@ -51,9 +46,6 @@ class IndexUsageIntegrationTest {
                 + "WHERE target_uuid = UNHEX('00000000000000000000000000000000') AND category = 'BAN' "
                 + "AND revoked_at IS NULL AND (expires_at IS NULL OR expires_at > UTC_TIMESTAMP(3)) "
                 + "ORDER BY created_at DESC LIMIT 1";
-        // The optimizer may pick either target_uuid index: idx_punishments_active (built for
-        // this exact filter) or idx_punishments_history (whose created_at ordering can satisfy
-        // the ORDER BY ... LIMIT 1 without a sort) — either is a real index, not a full scan.
         assertThat(usedKey(sql)).isIn("idx_punishments_active", "idx_punishments_history");
     }
 

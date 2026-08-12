@@ -87,8 +87,6 @@ class PunishmentRepositoryIntegrationTest {
     @Test
     void revokeClosesThePunishmentWithoutAlteringTheOriginalFields() throws Exception {
         UUID target = UUID.randomUUID();
-        // Truncated to milliseconds to match DATETIME(3) storage, so the round-tripped
-        // value can be compared for exact equality below.
         Instant createdAt = Instant.now().truncatedTo(java.time.temporal.ChronoUnit.MILLIS);
         Punishment applied = repository.insert(command(PunishmentCategory.MUTE, target, createdAt, null)).get();
 
