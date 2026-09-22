@@ -41,7 +41,7 @@ class MigrationIntegrationTest {
             assertThat(tableExists(provider.dataSource(), tables.profiles())).isTrue();
             assertThat(tableExists(provider.dataSource(), tables.punishments())).isTrue();
             assertThat(tableExists(provider.dataSource(), tables.syncEvents())).isTrue();
-            assertThat(schemaVersionRows(provider.dataSource(), tables)).containsExactly(1);
+            assertThat(schemaVersionRows(provider.dataSource(), tables)).containsExactly(1, 2);
         }
     }
 
@@ -53,7 +53,7 @@ class MigrationIntegrationTest {
             migrator.migrate();
             migrator.migrate();
 
-            assertThat(schemaVersionRows(provider.dataSource(), tables)).containsExactly(1);
+            assertThat(schemaVersionRows(provider.dataSource(), tables)).containsExactly(1, 2);
         }
     }
 
@@ -74,7 +74,7 @@ class MigrationIntegrationTest {
             }
             pool.shutdown();
 
-            assertThat(schemaVersionRows(provider.dataSource(), tables)).containsExactly(1);
+            assertThat(schemaVersionRows(provider.dataSource(), tables)).containsExactly(1, 2);
         }
     }
 

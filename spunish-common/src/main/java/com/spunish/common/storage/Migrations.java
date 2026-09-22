@@ -4,7 +4,7 @@ import java.util.List;
 
 final class Migrations {
 
-    static final int CURRENT_VERSION = 1;
+    static final int CURRENT_VERSION = 2;
 
     private Migrations() {
     }
@@ -12,6 +12,7 @@ final class Migrations {
     static List<String> statementsFor(int version, TableNames tables) {
         return switch (version) {
             case 1 -> v1(tables);
+            case 2 -> v2(tables);
             default -> throw new IllegalArgumentException("No migration defined for version " + version);
         };
     }
@@ -76,5 +77,19 @@ final class Migrations {
                   PRIMARY KEY (`version`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
                 """.formatted(tables.schemaVersion()));
+    }
+
+    /**
+     * Adds the index the retention cleanup's {@code DELETE} needs. Before this, "closed
+     * punishment older than N days" had no supporting index — {@code revoked_at} and
+     * {@code expires_at} are not the leading column of any V1 index — so retention would
+     * have run a full table scan every time it fired.
+     */
+    private static List<String> v2(TableNames tables) {
+        return List.of(
+                """
+                ALTER TABLE `%s`
+                  ADD KEY `idx_punishments_retention` (`revoked_at`, `expires_at`)
+                """.formatted(tables.punishments()));
     }
 }
