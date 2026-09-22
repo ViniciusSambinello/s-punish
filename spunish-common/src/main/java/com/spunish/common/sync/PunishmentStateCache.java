@@ -3,6 +3,7 @@ package com.spunish.common.sync;
 import com.spunish.common.domain.Punishment;
 import com.spunish.common.domain.PunishmentCategory;
 
+import java.time.Instant;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -34,8 +35,23 @@ public final class PunishmentStateCache {
         activeMuteByPlayer.remove(playerUuid);
     }
 
-    public Optional<Punishment> activeMute(UUID playerUuid) {
-        return Optional.ofNullable(activeMuteByPlayer.get(playerUuid));
+    /**
+     * A cached mute is only ever cleared by an explicit revoke (sync event or
+     * local revoke) or by a fresh {@link #track}, never by a background
+     * sweep — so a timed mute a player outlasts while staying connected must
+     * be checked against {@code now} here, at read time, or enforcement
+     * would keep blocking chat/commands for a mute that has already expired.
+     */
+    public Optional<Punishment> activeMute(UUID playerUuid, Instant now) {
+        Punishment mute = activeMuteByPlayer.get(playerUuid);
+        if (mute == null) {
+            return Optional.empty();
+        }
+        if (!mute.isPermanent() && !mute.expiresAt().isAfter(now)) {
+            activeMuteByPlayer.remove(playerUuid, mute);
+            return Optional.empty();
+        }
+        return Optional.of(mute);
     }
 
     /**

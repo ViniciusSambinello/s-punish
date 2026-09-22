@@ -40,7 +40,7 @@ public final class CommandBlockListener implements Listener {
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
-        Optional<Punishment> activeMute = services.stateCache().activeMute(player.getUniqueId());
+        Optional<Punishment> activeMute = services.stateCache().activeMute(player.getUniqueId(), services.clock().now());
         if (activeMute.isEmpty()) {
             return;
         }

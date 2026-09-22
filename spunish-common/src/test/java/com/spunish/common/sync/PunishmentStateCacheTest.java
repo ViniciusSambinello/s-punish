@@ -14,6 +14,10 @@ class PunishmentStateCacheTest {
 
     private final UUID playerUuid = UUID.randomUUID();
 
+    // Between each mute's createdAt (00:00) and expiresAt (01:00), so every
+    // existing assertion below still observes the mute as active.
+    private static final Instant NOW = Instant.parse("2026-01-01T00:30:00Z");
+
     private static Punishment mute(long id, UUID target) {
         return new Punishment(id, "PUB" + id, PunishmentCategory.MUTE, target, "Target",
                 ConsoleActor.INSTANCE, "spam", "Spam", Instant.parse("2026-01-01T00:00:00Z"),
@@ -31,7 +35,7 @@ class PunishmentStateCacheTest {
         PunishmentStateCache cache = new PunishmentStateCache();
         cache.track(playerUuid, null);
 
-        assertThat(cache.activeMute(playerUuid)).isEmpty();
+        assertThat(cache.activeMute(playerUuid, NOW)).isEmpty();
     }
 
     @Test
@@ -40,7 +44,7 @@ class PunishmentStateCacheTest {
         Punishment activeMute = mute(1, playerUuid);
         cache.track(playerUuid, activeMute);
 
-        assertThat(cache.activeMute(playerUuid)).contains(activeMute);
+        assertThat(cache.activeMute(playerUuid, NOW)).contains(activeMute);
     }
 
     @Test
@@ -50,10 +54,10 @@ class PunishmentStateCacheTest {
 
         cache.discard(playerUuid);
 
-        assertThat(cache.activeMute(playerUuid)).isEmpty();
+        assertThat(cache.activeMute(playerUuid, NOW)).isEmpty();
         // And a stray create event after discard has no effect (not tracked anymore).
         cache.onPunishmentCreated(mute(2, playerUuid));
-        assertThat(cache.activeMute(playerUuid)).isEmpty();
+        assertThat(cache.activeMute(playerUuid, NOW)).isEmpty();
     }
 
     @Test
@@ -65,7 +69,7 @@ class PunishmentStateCacheTest {
         Punishment newMute = mute(1, playerUuid);
         cache.onPunishmentCreated(newMute);
 
-        assertThat(cache.activeMute(playerUuid)).contains(newMute);
+        assertThat(cache.activeMute(playerUuid, NOW)).contains(newMute);
     }
 
     @Test
@@ -74,7 +78,7 @@ class PunishmentStateCacheTest {
 
         cache.onPunishmentCreated(mute(1, playerUuid));
 
-        assertThat(cache.activeMute(playerUuid)).isEmpty();
+        assertThat(cache.activeMute(playerUuid, NOW)).isEmpty();
     }
 
     @Test
@@ -84,7 +88,7 @@ class PunishmentStateCacheTest {
 
         cache.onPunishmentCreated(ban(1, playerUuid));
 
-        assertThat(cache.activeMute(playerUuid)).isEmpty();
+        assertThat(cache.activeMute(playerUuid, NOW)).isEmpty();
     }
 
     @Test
@@ -95,7 +99,7 @@ class PunishmentStateCacheTest {
 
         cache.onPunishmentRevoked(activeMute);
 
-        assertThat(cache.activeMute(playerUuid)).isEmpty();
+        assertThat(cache.activeMute(playerUuid, NOW)).isEmpty();
     }
 
     @Test
@@ -108,6 +112,22 @@ class PunishmentStateCacheTest {
         // A late-arriving revoke event for the OLD mute must not clear the new one.
         cache.onPunishmentRevoked(mute(1, playerUuid));
 
-        assertThat(cache.activeMute(playerUuid)).contains(newerMute);
+        assertThat(cache.activeMute(playerUuid, NOW)).contains(newerMute);
+    }
+
+    @Test
+    void activeMuteStopsBeingReportedOnceItsOwnExpiryHasPassed() {
+        // A tracked mute is never proactively swept out of the cache — it must
+        // stop being enforced as soon as `now` is past its own expiresAt,
+        // even though the entry is still physically present.
+        PunishmentStateCache cache = new PunishmentStateCache();
+        Punishment expiring = mute(1, playerUuid);
+        cache.track(playerUuid, expiring);
+
+        Instant afterExpiry = expiring.expiresAt().plusSeconds(1);
+        assertThat(cache.activeMute(playerUuid, afterExpiry)).isEmpty();
+
+        // And the now-stale entry must not resurface for an earlier instant either.
+        assertThat(cache.activeMute(playerUuid, NOW)).isEmpty();
     }
 }
