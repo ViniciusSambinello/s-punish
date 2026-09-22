@@ -39,7 +39,8 @@ CREATE TABLE `{p}punishments` (
   UNIQUE KEY `uq_punishments_public_id` (`public_id`),
   KEY `idx_punishments_active` (`target_uuid`, `category`, `revoked_at`, `expires_at`),
   KEY `idx_punishments_history` (`target_uuid`, `created_at`),
-  KEY `idx_punishments_report` (`category`, `created_at`, `actor_uuid`)
+  KEY `idx_punishments_report` (`category`, `created_at`, `actor_uuid`),
+  KEY `idx_punishments_retention` (`revoked_at`, `expires_at`) -- added in schema V2
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `{p}sync_events` (
@@ -90,6 +91,28 @@ CREATE TABLE `{p}schema_version` (
   sometimes prefers it over `idx_punishments_active` — both are real index
   hits, never a full scan). **`idx_punishments_report`** backs the
   aggregate report queries, including the per-staffer ones.
+  **`idx_punishments_retention`** backs the retention cleanup's search for
+  closed punishments past the retention window (neither `revoked_at` nor
+  `expires_at` is the leading column of any other index, so without this the
+  cleanup query would have to scan the whole table every time it runs).
+- **No DB-level constraint stops two simultaneously-active punishments** of
+  the same category for the same target. This was considered and rejected:
+  MySQL has no partial/filtered unique index (unlike Postgres), and a
+  generated column can't encode "not naturally expired" because that
+  comparison is against `NOW()`, which is non-deterministic and disallowed
+  in a generated column expression — only the deterministic half
+  (`revoked_at IS NULL`) could be expressed. That narrower constraint was
+  rejected too: `PunishmentIssueService.applyNew` legitimately calls
+  `insert()` directly (bypassing `insertWithOverride`) whenever
+  `findActive()` finds nothing, which includes the case where an old
+  punishment naturally expired but was never revoked — a real "unrevoked"
+  row the new one is meant to coexist with. A `revoked_at`-only unique
+  index would turn that legitimate reapply-after-expiry flow into a
+  duplicate-key error. The invariant is therefore enforced at the service
+  layer (`PunishmentIssueService`/`PunishmentRevokeService`), not the
+  database; closing this race fully would mean making that check-then-act
+  sequence atomic (e.g. a per-target advisory lock around issue), which is
+  a service-layer change, not a schema one.
 
 ## Migrations
 
@@ -118,3 +141,8 @@ retention has been enabled.
 (`sync.event-retention-ms`, default 5 minutes) — an instance that was
 offline longer than that reloads state at startup rather than depend on the
 event table to converge.
+
+Both cleanup deletes run in batches of 500 rows rather than as one
+unbounded `DELETE`, so a large backlog (e.g. retention enabled for the
+first time against years of accumulated history) cannot hold row locks for
+an extended period or block the housekeeping task for too long.

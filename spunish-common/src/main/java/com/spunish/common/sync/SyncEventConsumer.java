@@ -66,22 +66,32 @@ public final class SyncEventConsumer {
                 });
     }
 
+    /**
+     * Resolves every punishment referenced by this batch in a single indexed
+     * {@code WHERE id IN (...)} lookup instead of one round trip per event — a poll can
+     * return many events at once (e.g. catching up after being offline).
+     */
     private CompletableFuture<Void> processEvents(List<SyncEvent> events) {
-        List<CompletableFuture<Void>> pending = events.stream()
+        List<SyncEvent> toDispatch = events.stream()
                 .filter(event -> recentIds.addIfAbsent(event.id()))
                 .filter(event -> !serverIdentity.id().equals(event.originServer()))
-                .map(this::dispatch)
                 .toList();
-        return CompletableFuture.allOf(pending.toArray(CompletableFuture[]::new));
-    }
-
-    private CompletableFuture<Void> dispatch(SyncEvent event) {
-        return punishmentRepository.findById(event.punishmentId()).thenAccept(found -> found.ifPresent(punishment -> {
-            switch (event.type()) {
-                case PUNISHMENT_CREATED -> listener.onPunishmentCreated(punishment);
-                case PUNISHMENT_REVOKED -> listener.onPunishmentRevoked(punishment);
+        if (toDispatch.isEmpty()) {
+            return CompletableFuture.completedFuture(null);
+        }
+        List<Long> punishmentIds = toDispatch.stream().map(SyncEvent::punishmentId).distinct().toList();
+        return punishmentRepository.findByIds(punishmentIds).thenAccept(byId -> {
+            for (SyncEvent event : toDispatch) {
+                Punishment punishment = byId.get(event.punishmentId());
+                if (punishment == null) {
+                    continue;
+                }
+                switch (event.type()) {
+                    case PUNISHMENT_CREATED -> listener.onPunishmentCreated(punishment);
+                    case PUNISHMENT_REVOKED -> listener.onPunishmentRevoked(punishment);
+                }
             }
-        }));
+        });
     }
 
     private static Throwable unwrap(Throwable ex) {

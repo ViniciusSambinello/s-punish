@@ -32,7 +32,7 @@ public final class ChatListener implements Listener {
     @EventHandler
     public void onChat(AsyncChatEvent event) {
         Player player = event.getPlayer();
-        Optional<Punishment> activeMute = services.stateCache().activeMute(player.getUniqueId());
+        Optional<Punishment> activeMute = services.stateCache().activeMute(player.getUniqueId(), services.clock().now());
         if (activeMute.isEmpty()) {
             return;
         }

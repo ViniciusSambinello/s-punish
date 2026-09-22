@@ -14,6 +14,12 @@ import javax.sql.DataSource;
 
 public final class MySqlSyncEventRepository implements SyncEventRepository {
 
+    /**
+     * Rows deleted per statement, so a large backlog (e.g. cleanup not having run for a
+     * while) cannot hold row locks for an extended period in one unbounded {@code DELETE}.
+     */
+    private static final int DELETE_BATCH_SIZE = 500;
+
     private final DataSource dataSource;
     private final IoExecutor ioExecutor;
     private final TableNames tables;
@@ -46,12 +52,19 @@ public final class MySqlSyncEventRepository implements SyncEventRepository {
     @Override
     public CompletableFuture<Integer> deleteOlderThan(Instant threshold) {
         return ioExecutor.submit(() -> {
-            String sql = "DELETE FROM `" + tables.syncEvents() + "` WHERE created_at < ?";
+            String sql = "DELETE FROM `" + tables.syncEvents() + "` WHERE created_at < ? LIMIT ?";
+            int totalDeleted = 0;
             try (Connection connection = dataSource.getConnection();
                     PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setTimestamp(1, Timestamp.from(threshold));
-                return statement.executeUpdate();
+                statement.setInt(2, DELETE_BATCH_SIZE);
+                int deletedInBatch;
+                do {
+                    deletedInBatch = statement.executeUpdate();
+                    totalDeleted += deletedInBatch;
+                } while (deletedInBatch == DELETE_BATCH_SIZE);
             }
+            return totalDeleted;
         });
     }
 

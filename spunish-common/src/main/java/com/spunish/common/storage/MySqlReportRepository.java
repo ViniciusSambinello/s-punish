@@ -70,9 +70,15 @@ public final class MySqlReportRepository implements ReportRepository {
     public CompletableFuture<List<StaffRanking>> rankByStaff(PunishmentCategory category, Instant from, Instant to, int limit) {
         Filter filter = new Filter(category, from, to, null);
         return ioExecutor.submit(() -> {
-            String sql = "SELECT actor_uuid, MAX(actor_name) AS actor_name, COUNT(*) AS cnt FROM `"
-                    + tables.punishments() + "` WHERE " + filter.whereClause() + " AND actor_type = 'PLAYER' "
-                    + "GROUP BY actor_uuid ORDER BY cnt DESC LIMIT ?";
+            // MAX(actor_name) would pick the lexicographically greatest name, not the most
+            // recently applied one, if a staffer's name changed within the window — that
+            // silently contradicts StaffRanking's contract. A window function picks the name
+            // off the row that is actually most recent by created_at.
+            String sql = "SELECT actor_uuid, actor_name, cnt FROM (SELECT actor_uuid, actor_name, "
+                    + "COUNT(*) OVER (PARTITION BY actor_uuid) AS cnt, "
+                    + "ROW_NUMBER() OVER (PARTITION BY actor_uuid ORDER BY created_at DESC) AS rn "
+                    + "FROM `" + tables.punishments() + "` WHERE " + filter.whereClause() + " AND actor_type = 'PLAYER') ranked "
+                    + "WHERE rn = 1 ORDER BY cnt DESC LIMIT ?";
             try (Connection connection = dataSource.getConnection();
                     PreparedStatement statement = connection.prepareStatement(sql)) {
                 int index = filter.bind(statement, 1);
@@ -94,9 +100,15 @@ public final class MySqlReportRepository implements ReportRepository {
             PunishmentCategory category, Instant from, Instant to, UUID staffUuid) {
         Filter filter = new Filter(category, from, to, staffUuid);
         return ioExecutor.submit(() -> {
-            String sql = "SELECT reason_id, MAX(reason_display) AS reason_display, COUNT(*) AS cnt "
-                    + "FROM `" + tables.punishments() + "` WHERE " + filter.whereClause()
-                    + " GROUP BY reason_id ORDER BY cnt DESC";
+            // Same MAX()-picks-the-wrong-row issue as rankByStaff: reason_display is
+            // deliberately denormalized (docs/database.md) and can differ across rows sharing
+            // a reason_id if the catalog's text changed mid-window, so the most recent row's
+            // text — not the alphabetically greatest one — must be the one shown.
+            String sql = "SELECT reason_id, reason_display, cnt FROM (SELECT reason_id, reason_display, "
+                    + "COUNT(*) OVER (PARTITION BY reason_id) AS cnt, "
+                    + "ROW_NUMBER() OVER (PARTITION BY reason_id ORDER BY created_at DESC) AS rn "
+                    + "FROM `" + tables.punishments() + "` WHERE " + filter.whereClause() + ") ranked "
+                    + "WHERE rn = 1 ORDER BY cnt DESC";
             try (Connection connection = dataSource.getConnection();
                     PreparedStatement statement = connection.prepareStatement(sql)) {
                 filter.bind(statement, 1);

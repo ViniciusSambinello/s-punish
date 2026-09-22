@@ -109,13 +109,42 @@ public final class MessageService {
         return snapshot.get().dateTimeFormatter().zone();
     }
 
+    /**
+     * Placeholder keys whose value is always admin-authored MiniMessage
+     * source, never player/staff-supplied data, and therefore must be left
+     * unescaped so its formatting still applies once spliced into a
+     * template. Every other placeholder value is escaped before
+     * substitution — see {@link #escapeUntrusted}.
+     */
+    private static final Set<String> RAW_PLACEHOLDER_KEYS = Set.of("prefix", "state", "reason-display");
+
     private List<String> substitutedLines(String key, Map<String, String> placeholders) {
-        Map<String, String> withPrefix = withPrefix(placeholders);
+        Map<String, String> withPrefix = escapeUntrusted(withPrefix(placeholders));
         List<String> lines = new ArrayList<>();
         for (String raw : rawLines(key)) {
             lines.add(placeholderResolver.resolve(raw, withPrefix, token -> warnUnknownPlaceholder(key, token)));
         }
         return lines;
+    }
+
+    /**
+     * Escapes MiniMessage tag syntax in every placeholder value except the
+     * known trusted keys, so a value that originated from a player (for
+     * example a target's name, on a server where usernames are not
+     * guaranteed to be Mojang-validated) or from free text a staffer typed
+     * (for example a revoke reason) can never inject formatting, hover or
+     * click components into a message another user views or clicks.
+     */
+    private Map<String, String> escapeUntrusted(Map<String, String> placeholders) {
+        Map<String, String> escaped = new HashMap<>(placeholders.size());
+        for (Map.Entry<String, String> entry : placeholders.entrySet()) {
+            String value = entry.getValue();
+            if (value != null && !RAW_PLACEHOLDER_KEYS.contains(entry.getKey())) {
+                value = renderer.escapeTags(value);
+            }
+            escaped.put(entry.getKey(), value);
+        }
+        return escaped;
     }
 
     private Map<String, String> withPrefix(Map<String, String> placeholders) {

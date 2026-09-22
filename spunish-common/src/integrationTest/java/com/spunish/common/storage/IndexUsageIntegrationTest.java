@@ -58,6 +58,15 @@ class IndexUsageIntegrationTest {
         assertThat(usedKey(sql)).isEqualTo("idx_punishments_report");
     }
 
+    @Test
+    void retentionCleanupUsesAnIndexOnRevokedAndExpiresAtNotAFullTableScan() throws Exception {
+        String sql = "EXPLAIN DELETE FROM `" + tables.punishments() + "` WHERE "
+                + "(revoked_at IS NOT NULL AND revoked_at <= '2000-01-01 00:00:00') OR "
+                + "(revoked_at IS NULL AND expires_at IS NOT NULL AND expires_at <= '2000-01-01 00:00:00') "
+                + "LIMIT 500";
+        assertThat(usedKey(sql)).isEqualTo("idx_punishments_retention");
+    }
+
     private static String usedKey(String explainSql) throws Exception {
         try (Connection connection = provider.dataSource().getConnection();
                 Statement statement = connection.createStatement();

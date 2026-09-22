@@ -32,4 +32,17 @@ public final class MiniMessageRenderer {
             return Component.text(text);
         }
     }
+
+    /**
+     * Escapes any MiniMessage tag syntax in {@code text} so it renders as
+     * literal characters instead of being parsed as formatting/click/hover
+     * tags. Used on untrusted (player- or staff-supplied) placeholder values
+     * before they are spliced into an admin-authored message template, so a
+     * crafted value (for example a player name obtained on an offline-mode
+     * server) can never smuggle a {@code <click:run_command:...>} or similar
+     * component into text another user later views or clicks.
+     */
+    public String escapeTags(String text) {
+        return miniMessage.escapeTags(text);
+    }
 }

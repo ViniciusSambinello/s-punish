@@ -9,10 +9,13 @@ import com.spunish.common.storage.OverrideResult;
 import com.spunish.common.storage.PunishmentRepository;
 
 import java.time.Instant;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -66,6 +69,13 @@ final class InMemoryPunishmentRepository implements PunishmentRepository {
     @Override
     public CompletableFuture<Optional<Punishment>> findById(long id) {
         return CompletableFuture.completedFuture(Optional.ofNullable(byId.get(id)));
+    }
+
+    @Override
+    public CompletableFuture<Map<Long, Punishment>> findByIds(Collection<Long> ids) {
+        return CompletableFuture.completedFuture(ids.stream()
+                .filter(byId::containsKey)
+                .collect(Collectors.toMap(id -> id, byId::get)));
     }
 
     @Override
