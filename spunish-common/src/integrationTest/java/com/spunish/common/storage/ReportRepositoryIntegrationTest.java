@@ -104,6 +104,28 @@ class ReportRepositoryIntegrationTest {
     }
 
     @Test
+    void rankByStaffCarriesTheMostRecentNameNotTheAlphabeticallyGreatestOne() throws Exception {
+        PunishmentCategory category = PunishmentCategory.MUTE;
+        UUID staffUuid = UUID.randomUUID();
+        Instant now = Instant.now();
+
+        // "Zed" sorts after "Abe", but "Abe" is the name actually in force at the more recent
+        // punishment — a MAX(actor_name) aggregate would wrongly surface "Zed" here.
+        punishmentRepository.insert(new InsertPunishmentCommand(
+                category, UUID.randomUUID(), "T0", new PlayerActor(staffUuid, "Zed"),
+                "reason", "Reason", now.minusSeconds(30), null, "server-a")).get();
+        punishmentRepository.insert(new InsertPunishmentCommand(
+                category, UUID.randomUUID(), "T1", new PlayerActor(staffUuid, "Abe"),
+                "reason", "Reason", now, null, "server-a")).get();
+
+        List<StaffRanking> ranking = reportRepository.rankByStaff(category, now.minusSeconds(60), now.plusSeconds(60), 10).get();
+
+        assertThat(ranking).hasSize(1);
+        assertThat(ranking.get(0).count()).isEqualTo(2);
+        assertThat(ranking.get(0).staffName()).isEqualTo("Abe");
+    }
+
+    @Test
     void reasonDistributionOrdersDescendingByCount() throws Exception {
         PunishmentCategory category = PunishmentCategory.BAN;
         Instant now = Instant.now();
@@ -122,5 +144,33 @@ class ReportRepositoryIntegrationTest {
         assertThat(distribution).isNotEmpty();
         assertThat(distribution.get(0).reasonId()).isEqualTo("hacking");
         assertThat(distribution.get(0).count()).isEqualTo(3);
+    }
+
+    @Test
+    void reasonDistributionCarriesTheMostRecentDisplayTextNotTheAlphabeticallyGreatestOne() throws Exception {
+        PunishmentCategory category = PunishmentCategory.BAN;
+        // A reason id distinct from the other tests in this class, which share this same
+        // table without truncating between tests.
+        String reasonId = "rename-check-" + UUID.randomUUID();
+        Instant now = Instant.now();
+        Actor staffer = new PlayerActor(UUID.randomUUID(), "Staffer");
+
+        // The catalog's display text for this reason changed from "Zeta client" to "Alpha
+        // client" between these two applications — a MAX(reason_display) aggregate would
+        // wrongly surface the older, alphabetically-greater text.
+        punishmentRepository.insert(new InsertPunishmentCommand(
+                category, UUID.randomUUID(), "T0", staffer, reasonId, "Zeta client", now.minusSeconds(30), null, "server-a")).get();
+        punishmentRepository.insert(new InsertPunishmentCommand(
+                category, UUID.randomUUID(), "T1", staffer, reasonId, "Alpha client", now, null, "server-a")).get();
+
+        List<ReasonDistributionEntry> distribution =
+                reportRepository.reasonDistribution(category, now.minusSeconds(60), now.plusSeconds(60), null).get();
+
+        ReasonDistributionEntry entry = distribution.stream()
+                .filter(e -> e.reasonId().equals(reasonId))
+                .findFirst()
+                .orElseThrow();
+        assertThat(entry.count()).isEqualTo(2);
+        assertThat(entry.reasonDisplay()).isEqualTo("Alpha client");
     }
 }
