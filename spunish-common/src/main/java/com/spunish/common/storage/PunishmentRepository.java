@@ -5,7 +5,9 @@ import com.spunish.common.domain.Punishment;
 import com.spunish.common.domain.PunishmentCategory;
 
 import java.time.Instant;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -30,6 +32,14 @@ public interface PunishmentRepository {
     CompletableFuture<Optional<Punishment>> findActive(UUID targetUuid, PunishmentCategory category);
 
     CompletableFuture<Optional<Punishment>> findById(long id);
+
+    /**
+     * Batched form of {@link #findById(long)} for callers that need to resolve many
+     * punishments at once (e.g. dispatching a batch of sync events) — a single indexed
+     * {@code WHERE id IN (...)} lookup instead of one round trip per id. Ids with no
+     * matching row are simply absent from the result map.
+     */
+    CompletableFuture<Map<Long, Punishment>> findByIds(Collection<Long> ids);
 
     CompletableFuture<Optional<Punishment>> findByPublicId(String publicId);
 

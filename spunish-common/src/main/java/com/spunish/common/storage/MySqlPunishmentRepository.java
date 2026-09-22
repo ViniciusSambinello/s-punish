@@ -13,10 +13,14 @@ import java.sql.Timestamp;
 import java.sql.Types;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 import javax.sql.DataSource;
 
 public final class MySqlPunishmentRepository implements PunishmentRepository {
@@ -156,6 +160,32 @@ public final class MySqlPunishmentRepository implements PunishmentRepository {
     @Override
     public CompletableFuture<Optional<Punishment>> findById(long id) {
         return ioExecutor.submit(() -> findOneBy("id = ?", id));
+    }
+
+    @Override
+    public CompletableFuture<Map<Long, Punishment>> findByIds(Collection<Long> ids) {
+        if (ids.isEmpty()) {
+            return CompletableFuture.completedFuture(Map.of());
+        }
+        return ioExecutor.submit(() -> {
+            String placeholders = ids.stream().map(id -> "?").collect(Collectors.joining(","));
+            String sql = "SELECT " + COLUMNS + " FROM `" + tables.punishments() + "` WHERE id IN (" + placeholders + ")";
+            try (Connection connection = dataSource.getConnection();
+                    PreparedStatement statement = connection.prepareStatement(sql)) {
+                int index = 1;
+                for (long id : ids) {
+                    statement.setLong(index++, id);
+                }
+                Map<Long, Punishment> results = new HashMap<>();
+                try (ResultSet rs = statement.executeQuery()) {
+                    while (rs.next()) {
+                        Punishment punishment = PunishmentRowMapper.mapRow(rs);
+                        results.put(punishment.id(), punishment);
+                    }
+                }
+                return results;
+            }
+        });
     }
 
     @Override

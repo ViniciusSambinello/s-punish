@@ -32,12 +32,14 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -187,6 +189,13 @@ class SyncEventConsumerIntegrationTest {
         @Override
         public java.util.concurrent.CompletableFuture<Optional<Punishment>> findById(long id) {
             return java.util.concurrent.CompletableFuture.completedFuture(Optional.ofNullable(byId.get(id)));
+        }
+
+        @Override
+        public java.util.concurrent.CompletableFuture<Map<Long, Punishment>> findByIds(Collection<Long> ids) {
+            return java.util.concurrent.CompletableFuture.completedFuture(ids.stream()
+                    .filter(byId::containsKey)
+                    .collect(Collectors.toMap(id -> id, byId::get)));
         }
 
         @Override
