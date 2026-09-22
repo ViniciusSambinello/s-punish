@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-09-22
+
+### Fixed
+
+- Untrusted placeholders (target/actor/staffer names, free-text reasons) are
+  now escaped before MiniMessage rendering, closing a text-injection vector
+  in public and staff-facing announcements.
+- The reason-selection GUI no longer submits the same punishment twice on a
+  rapid double click.
+- A timed mute is no longer enforced past its own expiry for a player who
+  stays connected.
+- Staff ranking and reason-distribution reports now show the most recently
+  applied name/reason instead of the alphabetically greatest one.
+- Sync-event dispatch now batches punishment lookups instead of querying one
+  row at a time.
+- Retention cleanup now runs in batches and is backed by a supporting index,
+  instead of a single unbounded, unindexed `DELETE`.
+
 ## [0.1.0] - 2026-08-12
 
 ### Added
@@ -37,5 +55,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Shaded, relocated platform jars for both Paper and Velocity, with a smoke
   test proving the relocated MySQL driver opens a real connection.
 
-[Unreleased]: https://github.com/ViniciusSambinello/s-punish/compare/v0.1.0...develop
+[Unreleased]: https://github.com/ViniciusSambinello/s-punish/compare/v0.1.1...develop
+[0.1.1]: https://github.com/ViniciusSambinello/s-punish/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/ViniciusSambinello/s-punish/releases/tag/v0.1.0
