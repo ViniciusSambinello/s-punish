@@ -29,6 +29,7 @@ final class ReasonMenu extends Menu {
     private final List<Integer> contentSlots;
     private final List<Reason> pageItems;
     private final IssueResultPresenter presenter;
+    private boolean submitted;
 
     ReasonMenu(SPunishServices services, Player author, PunishmentTarget target, PunishmentCategory category,
             boolean cameFromCategoryMenu, int page) {
@@ -108,6 +109,14 @@ final class ReasonMenu extends Menu {
     }
 
     private void apply(Player player, Reason reason) {
+        // Guards against a rapid double click (or click-spam) firing this
+        // twice before the first async issue() call resolves, which would
+        // otherwise race past the "already active" check and create two
+        // punishments for the same target/category.
+        if (submitted) {
+            return;
+        }
+        submitted = true;
         IssueCommand command = new IssueCommand(target, Actors.of(player), category, reason, null);
         services.issueService().issue(command).thenAccept(result ->
                 services.mainThreadDispatcher().runOnMainThread(() -> {
